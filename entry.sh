@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
-
 set -e
 
-[ "$DEBUG" == 'true' ] && set -x
+test "$DEBUG" == 'true' && set -x
 
 DAEMON=sshd
+SSH_CONFIG_VOLUME=/root/ssh-config
 
 # Copy default config from cache
-if [ ! "$(ls -A /etc/ssh)" ]; then
+test ! "$(ls -A /etc/ssh)" && \
    cp -a /etc/ssh.cache/* /etc/ssh/
-fi
 
 # Generate Host keys, if required
-if [ ! -f /etc/ssh/ssh_host_* ]; then
+test ! -f /etc/ssh/ssh_host_* && \
     ssh-keygen -A
-fi
 
 # Fix permissions, if writable
 test -w ~/.ssh && {
-  d=~/ssh-config
-  test -d "$d" -a "$(ls -A "$d")" && cp -a "$d"/* ~/.ssh
+  test -d "$SSH_CONFIG_VOLUME" -a "$(ls -A "$SSH_CONFIG_VOLUME")" && cp -a "$SSH_CONFIG_VOLUME"/* ~/.ssh
   chown -R root:root ~/.ssh && chmod 700 ~/.ssh/ && chmod 600 ~/.ssh/* || echo "WARNING: No SSH authorized_keys or config found for root"
 }
 
