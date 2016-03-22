@@ -7,11 +7,11 @@ DAEMON=sshd
 SSH_CONFIG_VOLUME=/root/ssh-config
 
 # Copy default config from cache
-test ! "$(ls -A /etc/ssh)" && \
+test "$(ls -A /etc/ssh)" || \
    cp -a /etc/ssh.cache/* /etc/ssh/
 
 # Generate Host keys, if required
-test ! -f /etc/ssh/ssh_host_* && \
+test "$(ls -A /etc/ssh/ssh_host_*)" || \
     ssh-keygen -A
 
 # Fix permissions, if writable
