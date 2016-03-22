@@ -17,9 +17,11 @@ if [ ! -f /etc/ssh/ssh_host_* ]; then
 fi
 
 # Fix permissions, if writable
-if [ -w ~/.ssh ]; then
-    chown -R root:root ~/.ssh && chmod 700 ~/.ssh/ && chmod 600 ~/.ssh/* || echo "WARNING: No SSH authorized_keys or config found for root"
-fi
+test -w ~/.ssh && {
+  d=~/ssh-config
+  test -d "$d" -a "$(ls -A "$d")" && cp -a "$d"/* ~/.ssh
+  chown -R root:root ~/.ssh && chmod 700 ~/.ssh/ && chmod 600 ~/.ssh/* || echo "WARNING: No SSH authorized_keys or config found for root"
+}
 
 stop() {
     echo "Received SIGINT or SIGTERM. Shutting down $DAEMON"
