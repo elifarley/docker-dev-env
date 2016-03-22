@@ -1,9 +1,7 @@
-FROM alpine:latest
-
+FROM alpine:3.3
 MAINTAINER Elifarley <elifarley@gmail.com>
 
-RUN apk update && \
-    apk add bash git openssh rsync && \
+RUN apk --update add --no-cache bash openssh rsync && \
     mkdir -p ~root/.ssh && chmod 700 ~root/.ssh/ && \
     echo -e "Port 22\n" >> /etc/ssh/sshd_config && \
     cp -a /etc/ssh /etc/ssh.cache && \
