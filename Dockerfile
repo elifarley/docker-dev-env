@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-MAINTAINER Andrew Cutler <andrew@panubo.com>
+MAINTAINER Elifarley <elifarley@gmail.com>
 
 RUN apk update && \
     apk add bash git openssh rsync && \
