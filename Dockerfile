@@ -11,7 +11,7 @@ ENV _USER app
 
 ENV HOME /$_USER
 RUN adduser -D -h "$HOME" -g "" $_USER && \
-mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh/ && chown $_USER:$_USER -R $HOME
+mkdir -p $HOME/.ssh && chmod go-w $HOME $HOME/.ssh && chown $_USER:$_USER -R $HOME
 
 WORKDIR $HOME
 
