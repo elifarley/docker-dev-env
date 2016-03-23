@@ -4,14 +4,13 @@ MAINTAINER Elifarley <elifarley@gmail.com>
 RUN apk --update add --no-cache bash openssh rsync && \
   rm -rf /var/cache/apk/*
 
-RUN echo -e "\nPort 22\nPasswordAuthentication no\nChallengeResponseAuthentication no\nUsePAM no\n" >> /etc/ssh/sshd_config && \
+RUN echo -e "\nPort 22\nPermitRootLogin yes\nPasswordAuthentication no\nChallengeResponseAuthentication no\n" >> /etc/ssh/sshd_config && \
   cp -a /etc/ssh /etc/ssh.cache
 
-ENV _USER app
+ENV _USER root
 
 ENV HOME /$_USER
-RUN adduser -D -h "$HOME" -g "" $_USER && \
-mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && chown $_USER:$_USER -R $HOME
+RUN mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && chown $_USER:$_USER -R $HOME
 
 WORKDIR $HOME
 
