@@ -16,9 +16,9 @@ test "$(ls -A /etc/ssh/ssh_host_*)" || \
 
 test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
 # Fix permissions, if writable
-test -w "$HOME"/.ssh && {
+test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
   test -d "$SSH_CONFIG_VOLUME" -a "$(ls -A "$SSH_CONFIG_VOLUME")" && cp -a "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
-  chown -R $_USER:$_USER "$HOME"/.ssh && chmod 700 "$HOME"/.ssh/ && chmod 600 "$HOME"/.ssh/*
+  chown -R $_USER:$_USER "$HOME"/.ssh && chmod 700 "$HOME"/.ssh && chmod 600 "$HOME"/.ssh/authorized_keys
 }
 ak="$HOME"/.ssh/authorized_keys
 test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
