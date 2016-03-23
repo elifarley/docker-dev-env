@@ -10,12 +10,11 @@ RUN echo -e "Port 22\n" >> /etc/ssh/sshd_config && \
 ENV _USER app
 
 ENV HOME /$_USER
-RUN adduser --disabled-password --home=$HOME --gecos "" $_USER && chown $_USER:$_USER -R $HOME
-USER $_USER
+RUN adduser -D -h "$HOME" -g "" $_USER && \
+mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh/ && chown $_USER:$_USER -R $HOME
+
 WORKDIR $HOME
 
-RUN mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh/
-  
 EXPOSE 22
 
 COPY entry.sh /entry.sh
