@@ -4,7 +4,7 @@ MAINTAINER Elifarley <elifarley@gmail.com>
 RUN apk --update add --no-cache bash openssh rsync && \
   rm -rf /var/cache/apk/*
 
-RUN echo -e "\nPort 22\nPermitRootLogin yes\nPasswordAuthentication no\nChallengeResponseAuthentication no\n" >> /etc/ssh/sshd_config && \
+RUN printf "\nPort 22\nPermitRootLogin yes\nPasswordAuthentication no\nChallengeResponseAuthentication no\n" >> /etc/ssh/sshd_config && \
   cp -a /etc/ssh /etc/ssh.cache
 
 ENV _USER root
