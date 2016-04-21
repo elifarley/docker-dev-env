@@ -3,6 +3,9 @@ MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
+RUN apk --update add --no-cache tar vim less findutils git && \
+  rm -rf /var/cache/apk/*
+
 RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
   | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
@@ -10,9 +13,6 @@ RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
   printf "PATH=$PATH\n" >> "$HOME"/.ssh/environment && \
   printf ". '$HOME'/.ssh/environment\npwd" \
     >> "$HOME"/.bashrc
-
-RUN apk --update add --no-cache vim exuberant-ctags less locate git && \
-  rm -rf /var/cache/apk/*
 
 # Install Pathogen - https://github.com/tpope/vim-pathogen
 RUN mkdir -p "$HOME"/.vim/autoload "$HOME"/.vim/bundle "$HOME"/.vim/colors && \
