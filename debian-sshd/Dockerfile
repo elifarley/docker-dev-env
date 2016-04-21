@@ -44,6 +44,8 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 
+# OR RUN echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
+
 WORKDIR $HOME
 RUN chown -R $_USER:$_USER "$HOME"
 
