@@ -1,14 +1,12 @@
 FROM elifarley/docker-dev-env:alpine-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
-#ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
-ADD https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz /tmp/shellbase.tgz
-ADD https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark "$HOME"/.dircolors
-
-RUN tar -f /tmp/shellbase.tgz --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
+RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
+  | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
+  curl -fsSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark > "$HOME"/.dircolors && \
   printf "PATH=$PATH\n" >> "$HOME"/.ssh/environment && \
   printf ". '$HOME'/.ssh/environment\npwd" \
     >> "$HOME"/.bashrc
