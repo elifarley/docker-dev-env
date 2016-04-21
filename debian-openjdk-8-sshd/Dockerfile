@@ -22,7 +22,7 @@ RUN chmod 755 /bin/gosu && echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
-ENV APT_PACKAGES "openssh-server sudo ca-certificates curl"
+ENV APT_PACKAGES "openssh sudo ca-certificates curl rsync"
 RUN printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
 > /etc/apt/apt.conf.d/local && apt-get update && apt-get -y dist-upgrade && \
 apt-get install -y --no-install-recommends $APT_PACKAGES && \
@@ -44,11 +44,12 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 
+WORKDIR $HOME
+RUN chown -R $_USER:$_USER "$HOME"
+
+ENV JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
+
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
 chmod +x /entry.sh
 ENTRYPOINT ["/entry.sh"]
-
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
-
-RUN chown -R $_USER:$_USER "$HOME"
-ENV JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
