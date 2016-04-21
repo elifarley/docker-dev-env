@@ -3,7 +3,7 @@
 PS3="Choose image suffix: "
 QUIT=".QUIT."; touch "$QUIT"
 
-select image_suffix in sshd:debian sshd:alpine dev-env:debian dev-env:alpine; do
+select image_suffix in alpine-sshd debian-sshd debian-openjdk-8-sshd alpine-dde debian-dde debian-rails-dde; do
   case $image_suffix in
         "$QUIT")
           echo "Exiting."
@@ -13,11 +13,11 @@ select image_suffix in sshd:debian sshd:alpine dev-env:debian dev-env:alpine; do
           echo "You picked: $REPLY. $FILENAME"
           ;;
   esac
-done; rm "$QUIT"; image_suffix="${image_suffix:sshd:alpine}
+done; rm "$QUIT"; image_suffix="${image_suffix:alpine-sshd}
 
 set -x
 
-IMAGE="elifarley/docker$image_suffix"
+IMAGE="elifarley/docker-dev-env:$image_suffix"
 
 project_root="$1"; shift
 test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhost
