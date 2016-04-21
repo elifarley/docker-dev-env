@@ -17,7 +17,7 @@ WORKDIR $HOME
 EXPOSE 22
 
 ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh /entry.sh
-chmod +x /entry.sh
+RUN chmod +x /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
 
