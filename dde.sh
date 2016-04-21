@@ -3,7 +3,7 @@
 PS3="Choose image suffix: "
 QUIT=".QUIT."; touch "$QUIT"
 
-select image_suffix in alpine-sshd debian-sshd debian-openjdk-8-sshd alpine-dde debian-dde debian-rails-dde; do
+select image_suffix in alpine-sshd alpine-openjdk-8-sshd alpine-jdk-8-sshd alpine-dde debian-sshd debian-openjdk-8-sshd debian-openjdk-8-sshd-compiler debian-dde debian-rails-dde; do
   case $image_suffix in
         "$QUIT")
           echo "Exiting."
