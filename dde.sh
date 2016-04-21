@@ -4,7 +4,7 @@ PS3="Choose image suffix: "
 QUIT=".QUIT."; touch "$QUIT"
 
 select image_suffix in alpine-sshd alpine-openjdk-8-sshd alpine-jdk-8-sshd alpine-dde debian-sshd debian-openjdk-8-sshd debian-openjdk-8-sshd-compiler debian-dde debian-rails-dde; do
-  case $image_suffix in
+  case "$image_suffix" in
         "$QUIT")
           echo "Exiting."
           break
@@ -13,7 +13,7 @@ select image_suffix in alpine-sshd alpine-openjdk-8-sshd alpine-jdk-8-sshd alpin
           echo "You picked: $REPLY. $FILENAME"
           ;;
   esac
-done; rm "$QUIT"; image_suffix="${image_suffix:alpine-sshd}
+done; rm "$QUIT"; image_suffix="${image_suffix:alpine-sshd}"
 
 set -x
 
