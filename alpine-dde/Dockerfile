@@ -3,7 +3,7 @@ MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
-RUN apk --update add --no-cache tar vim less findutils git && \
+RUN apk --update add --no-cache tar sed vim less findutils git && \
   rm -rf /var/cache/apk/*
 
 RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
