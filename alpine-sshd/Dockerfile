@@ -38,6 +38,7 @@ RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
 # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
 WORKDIR $HOME
+RUN chown -R $_USER:$_USER "$HOME"
 
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
   chmod +x /entry.sh
