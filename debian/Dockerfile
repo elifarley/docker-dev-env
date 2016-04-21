@@ -44,8 +44,8 @@ RUN adduser --disabled-password --home "$HOME" --shell /bin/bash --gecos "" $_US
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 
-RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-jenkins-slaves/master/entry.sh -o /entry.sh && \
-  chmod +x /entry.sh
+ADD https://raw.githubusercontent.com/elifarley/docker-jenkins-slaves/master/entry.sh /entry.sh
+RUN chmod +x /entry.sh
 ENTRYPOINT ["/entry.sh"]
 
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
