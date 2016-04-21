@@ -20,9 +20,3 @@ RUN curl -SL https://github.com/grammarly/rocker/releases/download/"$ROCKER_VERS
 RUN echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
 WORKDIR $HOME
-COPY gemrc .gemrc
-ENV GEM_SPEC_CACHE "$HOME/gemspec"
-ENV GEM_HOME "$HOME/gem-home"
-ENV PATH "$GEM_HOME/bin:$PATH"
-
-#VOLUME $HOME/.rbenv
