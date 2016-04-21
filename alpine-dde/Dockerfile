@@ -5,7 +5,7 @@ ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
 RUN apk --update add --no-cache tar sed vim less findutils git build-base && \
   curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
-  (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base rm -rf /tmp/*)
+  (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base rm -rf /tmp/*) && \
   rm -rf /var/cache/apk/*
 
 RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
