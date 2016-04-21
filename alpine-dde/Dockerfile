@@ -1,4 +1,4 @@
-FROM elifarley/docker-sshd:alpine
+FROM elifarley/docker-dev-env:alpine-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
