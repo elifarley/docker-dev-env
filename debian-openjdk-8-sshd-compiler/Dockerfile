@@ -1,4 +1,4 @@
-FROM elifarley:docker-dev-env/debian-openjdk-8-sshd
+FROM elifarley/docker-dev-env:debian-openjdk-8-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 ENV APT_PACKAGES "\
