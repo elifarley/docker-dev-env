@@ -13,6 +13,7 @@ select image_suffix in alpine-sshd alpine-openjdk-8-sshd alpine-jdk-8-sshd alpin
           echo "You picked: $REPLY. $FILENAME"
           ;;
   esac
+  break
 done; rm "$QUIT"; image_suffix="${image_suffix:alpine-sshd}"
 
 set -x
