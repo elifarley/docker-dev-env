@@ -16,7 +16,8 @@ WORKDIR $HOME
 
 EXPOSE 22
 
-COPY entry.sh /entry.sh
+ADD https://raw.githubusercontent.com/elifarley/docker-jenkins-slaves/master/entry.sh /entry.sh
+chmod +x /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
 
