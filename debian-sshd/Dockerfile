@@ -22,7 +22,7 @@ RUN chmod 755 /bin/gosu && echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
-ENV APT_PACKAGES "openssh sudo ca-certificates curl rsync"
+ENV APT_PACKAGES "openssh-server sudo ca-certificates curl rsync"
 RUN printf 'APT::Get::Install-Recommends "false";\nDpkg::Options {\n"--force-confdef";\n"--force-confold";\n}' \
 > /etc/apt/apt.conf.d/local && apt-get update && apt-get -y dist-upgrade && \
 apt-get install -y --no-install-recommends $APT_PACKAGES && \
