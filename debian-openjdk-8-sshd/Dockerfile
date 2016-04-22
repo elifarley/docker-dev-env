@@ -50,6 +50,6 @@ RUN chown -R $_USER:$_USER "$HOME"
 ENV JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
 
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
-chmod +x /entry.sh
-ENTRYPOINT ["/entry.sh"]
+  chmod +x /entry.sh
+ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
