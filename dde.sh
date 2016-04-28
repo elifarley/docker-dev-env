@@ -23,6 +23,7 @@ IMAGE="elifarley/docker-dev-env:$image_suffix"
 project_root="$1"; shift
 test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhost
 
+project_root="$(readlink -f "$project_root")"
 project_name="$(basename "$project_root")"
 
 docker pull "$IMAGE"
