@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
+CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 set -e
+
+test -r "$CMD_BASE"/env-vars.sh && \
+  . "$CMD_BASE"/env-vars.sh
 
 test "$DEBUG" == 'true' && set -x
 
