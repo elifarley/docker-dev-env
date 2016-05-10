@@ -31,10 +31,10 @@ docker pull "$IMAGE"
 docker rm -f "$image_suffix"
 
 DDE_BASH_HISTORY=~/.dde/bash-history-"$project_name"
-DDE_VIMINFO=~/.dde/viminfo/"$project_name"
-mkdir -p "$(dirname "$DDE_VIMINFO")" && \
-touch "$DDE_BASH_HISTORY" && \
-touch "$DDE_VIMINFO"
+DDE_VIMINFO=~/.dde/viminfo
+DDE_UNDOFILES=~/.dde/vim-undofiles-"$project_name"
+mkdir -p "$DDE_VIMINFO" "$DDE_UNDOFILES" && \
+touch "$DDE_BASH_HISTORY"
 
 exec docker run --name "$image_suffix" --hostname "$project_name" \
 -d \
@@ -43,6 +43,7 @@ exec docker run --name "$image_suffix" --hostname "$project_name" \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
 -v ~/.ssh/known_hosts:/mnt-ssh-config/known_hosts:ro \
 -v "$DDE_BASH_HISTORY":/app/.bash_history \
--v "$(dirname "$DDE_VIMINFO")":/app/.vim/viminfo \
+-v "$DDE_VIMINFO":/app/.vim/viminfo \
+-v "$DDE_UNDOFILES":/app/.vim/undofiles \
 -v "$project_root":/data \
 "$IMAGE" "$@"
