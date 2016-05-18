@@ -4,7 +4,7 @@ MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
-RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.5.tar.gz \
+RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.8.tar.gz \
   | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
   curl -fsSL https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark > "$HOME"/.dircolors && \
