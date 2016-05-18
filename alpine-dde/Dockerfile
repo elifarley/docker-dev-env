@@ -27,7 +27,8 @@ sed -i '1 i\execute pathogen#infect()\ncall pathogen#helptags()\n' "$HOME"/.vimr
   git clone git://github.com/tpope/vim-eunuch.git && \
   git clone git://github.com/altercation/vim-colors-solarized.git && \
   git clone https://github.com/tpope/vim-obsession && \
-  git clone git://github.com/tpope/vim-vinegar.git && \
+  git clone https://github.com/justinmk/vim-dirvish.git && \
+  git clone git://github.com/tpope/vim-vinegar.git vim-vinegar~ && \
   git clone https://github.com/ervandew/supertab && \
   git clone https://github.com/ctrlpvim/ctrlp.vim.git && \
   git clone https://github.com/majutsushi/tagbar && \
