@@ -1,4 +1,4 @@
-FROM elifarley/docker-dev-env:debian-dde
+FROM elifarley/docker-dev-env:debian-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 
 #ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
