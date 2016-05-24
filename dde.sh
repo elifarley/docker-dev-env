@@ -35,6 +35,7 @@ DDE_VIMINFO=~/.dde/viminfo
 DDE_UNDOFILES=~/.dde/vim-undofiles-"$project_name"
 mkdir -p "$DDE_VIMINFO" "$DDE_UNDOFILES" && \
 touch "$DDE_BASH_HISTORY"
+test -f ~/.gitconfig && gitconfig="-v $HOME/.gitconfig:/app/.gitconfig:ro"
 
 exec docker run --name "$image_suffix" --hostname "$project_name" \
 -d \
@@ -42,6 +43,7 @@ exec docker run --name "$image_suffix" --hostname "$project_name" \
 -v ~/.ssh/id_rsa.pub:/mnt-ssh-config/authorized_keys:ro \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
 -v ~/.ssh/known_hosts:/mnt-ssh-config/known_hosts:ro \
+$gitconfig \
 -v "$DDE_BASH_HISTORY":/app/.bash_history \
 -v "$DDE_VIMINFO":/app/.vim/viminfo \
 -v "$DDE_UNDOFILES":/app/.vim/undofiles \
