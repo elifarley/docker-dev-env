@@ -1,4 +1,4 @@
-FROM elifarley/docker-dev-env:debian-sshd-python-2.7
+FROM elifarley/docker-dev-env:debian-openjdk-8-sshd-python-2.7
 MAINTAINER elifarley@gmail.com
 
 ENV TERRAFORM_VERSION=0.6.16
