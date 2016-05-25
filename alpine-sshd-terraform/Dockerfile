@@ -7,6 +7,7 @@ RUN apk --update add git openssl unzip \
   python py-pip py-setuptools groff less && \
   curl -fsSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
   -o /tmp/terraform.zip && \
-  unzip /tmp/terraform.zip -d /usr/bin && \
+  unzip /tmp/terraform.zip -d /usr/bin \
+    -i terraform '*aws' terraform-provis{'*file','*exec'} && \
   pip install awscli && \
   rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
