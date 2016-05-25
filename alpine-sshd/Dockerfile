@@ -34,7 +34,8 @@ ENV HOME /$_USER
 RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
   { getent group "sudo" || addgroup -S sudo ;} && echo '%sudo   ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
+  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && \
+  echo -ne "Alpine Linux 3.3 image. (`uname -rsv`)\n" >> /$HOME/docker-image.info
 
 # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
