@@ -11,3 +11,5 @@ RUN apk --update add openssl \
     terraform '*aws' terraform-provisioner-file 'terraform-provisioner-*exec' && \
   pip install awscli && \
   rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+
+# Terraform doesn't work in Alpine - see https://github.com/hashicorp/terraform/issues/2840
