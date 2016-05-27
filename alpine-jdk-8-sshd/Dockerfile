@@ -34,7 +34,7 @@ ENV HOME /$_USER
 RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
   { getent group "sudo" || addgroup -S sudo ;} && echo '%sudo   ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
+  mkdir -p $HOME/bin $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 
 # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
@@ -44,7 +44,10 @@ RUN chown -R $_USER:$_USER "$HOME"
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
   chmod +x /entry.sh && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/env-vars.sh -o /env-vars.sh && \
-  chmod +x /env-vars.sh
+  chmod +x /env-vars.sh && \
+  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/keytool-import-cert.sh -o "$HOME"/bin/keytool-import-cert.sh && \
+  chmod +x "$HOME"/bin/*
+
 ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
