@@ -39,13 +39,23 @@ test -f ~/.hgrc && hgrc="-v $HOME/.hgrc:/app/.hgrc:ro" || unset hgrc
 test -f ~/.gitconfig && gitconfig="-v $HOME/.gitconfig:/app/.gitconfig:ro" || unset gitconfig
 test -d ~/.m2 && m2dir="-v $HOME/.m2:/app/.m2" || unset m2dir
 
+DOCKER_LIBS="$(ldd $(which docker) | grep libdevmapper | cut -d' ' -f3)"
+test "$DOCKER_LIBS" && MOUNT_DOCKER="
+-v /var/run/docker.sock:/var/run/docker.sock
+-v $DOCKER_LIBS:$DOCKER_LIBS:ro
+-v $(which docker):$(which docker):ro
+" || unset MOUNT_DOCKER
+test -f ~/.docker/config.json && MOUNT_DOCKER="$MOUNT_DOCKER
+-v $HOME/.docker/config.json:/mnt-ssh-config/docker-config.json:ro
+"
+
 exec docker run --name "$image_suffix" --hostname "$project_name" \
 -d \
 -p 2200:2200 -p 3000:3000 \
 -v ~/.ssh/id_rsa.pub:/mnt-ssh-config/authorized_keys:ro \
 -v ~/.ssh/id_rsa:/mnt-ssh-config/id_rsa:ro \
 -v ~/.ssh/known_hosts:/mnt-ssh-config/known_hosts:ro \
-$hgrc $gitconfig $m2dir \
+$hgrc $gitconfig $m2dir $MOUNT_DOCKER \
 -v "$DDE_BASH_HISTORY":/app/.bash_history \
 -v "$DDE_VIMINFO":/app/.vim/viminfo \
 -v "$DDE_UNDOFILES":/app/.vim/undofiles \
