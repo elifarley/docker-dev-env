@@ -15,8 +15,8 @@ ENV HOME=/$_USER
 # SSHD
 EXPOSE 2200
 
-ENTRYPOINT /bin/tini -- /entry.sh
-CMD /usr/sbin/sshd -D -f /etc/ssh/sshd_config
+ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
+CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
