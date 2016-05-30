@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 test "$DEBUG" && set -x
 
 main() {
