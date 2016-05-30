@@ -1,3 +1,5 @@
+test "$DEBUG" && set -x
+
 main() {
   local cmd="$1"; shift
   case "$cmd" in
