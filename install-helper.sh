@@ -198,6 +198,7 @@ add_user_alpine() {
   local user="$1"; shift
 
   adduser -D -h "$HOME" -s /bin/bash "$user" || return $?
+  # Disable sudo: echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
   { getent group "sudo" || addgroup -S sudo ;} || return $?
   printf '%sudo   ALL=(ALL:ALL) ALL\n' >> /etc/sudoers || return $?
   gpasswd -a "$user" sudo || return $?
@@ -205,7 +206,8 @@ add_user_alpine() {
   mkdir -p "$HOME"/.ssh || return $?
   chmod go-w "$HOME" || return $?
   chmod 700 "$HOME"/.ssh
-  # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
+
+  chown -R "$user:$user" "$HOME"
 }
 
 cleanup() {
