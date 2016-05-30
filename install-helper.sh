@@ -21,6 +21,9 @@ main() {
     configure)
       configure "$@"
       ;;
+    add-user)
+      add_user "$@"
+      ;;
     cleanup)
       cleanup "$@"
       ;;
@@ -177,6 +180,32 @@ configure_sshd_alpine() {
   cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config || return $?
   rm /etc/ssh/sshd_config.tmp || return $?
   cp -a /etc/ssh /etc/ssh.cache
+}
+
+add_user() {
+
+  os_version | grep Alpine && \
+    add_user_alpine "$@" && return $?
+
+  os_version | grep Debian && \
+    add_user_debian "$@" && return $?
+
+  os_version && return 1
+
+}
+
+add_user_alpine() {
+  local user="$1"; shift
+
+  adduser -D -h "$HOME" -s /bin/bash "$user" || return $?
+  { getent group "sudo" || addgroup -S sudo ;} || return $?
+  printf '%sudo   ALL=(ALL:ALL) ALL\n' >> /etc/sudoers || return $?
+  gpasswd -a "$user" sudo || return $?
+  printf "$user ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers || return $?
+  mkdir -p "$HOME"/.ssh || return $?
+  chmod go-w "$HOME" || return $?
+  chmod 700 "$HOME"/.ssh
+  # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 }
 
 cleanup() {
