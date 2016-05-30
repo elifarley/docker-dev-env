@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 test "$DEBUG" && set -x
+export IMAGE_INFO_FILE="$HOME"/docker-image.info
 
 main() {
   local cmd="$1"; shift
@@ -34,7 +35,8 @@ os_version() { (
 ) }
 
 save_image_info() {
-  echo -ne "BASE_IMAGE: $BASE_IMAGE\n$(os_version)\n($(uname -rsv))\n" >> /$HOME/docker-image.info
+  date +%F-%T.%N >> "$IMAGE_INFO_FILE"
+  printf "BASE_IMAGE: %s\n%s\n(%s)\n" "$BASE_IMAGE" "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
 }
 
 install() {
