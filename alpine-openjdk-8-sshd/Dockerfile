@@ -33,7 +33,7 @@ RUN \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
   install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA"
 
-RUN add_user "$_USER"
+RUN install-helper.sh add-user "$_USER"
 
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
   chmod +x /entry.sh && \
