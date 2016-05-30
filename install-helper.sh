@@ -41,7 +41,7 @@ os_version() { (
 ) }
 
 save_image_info() {
-  printf 'Build date: %s %s' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_INFO_FILE"
+  printf 'Build date: %s %s\n' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_INFO_FILE"
   printf 'Base image: %s\n%s\n(%s)\n' "$BASE_IMAGE" "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
 }
 
