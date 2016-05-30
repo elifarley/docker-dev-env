@@ -15,6 +15,9 @@ main() {
     install)
       install "$@"
       ;;
+    install-base)
+      install_base "$@"
+      ;;
     save-image-info)
       save_image_info "$@"
       ;;
@@ -33,7 +36,7 @@ main() {
 }
 
 invalid_cmd() {
-  echo "Usage: $0 update-pkg-list|install-pkg|install|save-image-info|configure|cleanup"
+  echo "Usage: $0 update-pkg-list|install-base|install-pkg|install|save-image-info|configure|add-user|cleanup"
 }
 
 os_version() { (
@@ -83,6 +86,12 @@ install() {
     *)
       invalid_cmd "$arg" "$@"
   esac
+}
+
+install_base() {
+  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh || return $?
+  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/env-vars.sh -o /env-vars.sh || return $?
+  chmod +x /*.sh || return $?
 }
 
 install_tini() {
