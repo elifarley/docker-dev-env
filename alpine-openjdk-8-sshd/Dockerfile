@@ -15,8 +15,8 @@ ENV HOME=/$_USER
 # SSHD
 EXPOSE 2200
 
-ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
-CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
+ENTRYPOINT /bin/tini -- /entry.sh
+CMD /usr/sbin/sshd -D -f /etc/ssh/sshd_config
 
 WORKDIR $HOME
 
@@ -35,7 +35,4 @@ RUN \
 
 RUN install-helper.sh add-user "$_USER"
 
-RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
-  chmod +x /entry.sh && \
-  curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/env-vars.sh -o /env-vars.sh && \
-  chmod +x /env-vars.sh
+RUN install-helper.sh install-base
