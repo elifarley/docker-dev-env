@@ -38,7 +38,7 @@ os_version() { (
 ) }
 
 save_image_info() {
-  date +%F-%T.%N >> "$IMAGE_INFO_FILE"
+  date +'%F-%T.%N %Z' >> "$IMAGE_INFO_FILE"
   printf "BASE_IMAGE: %s\n%s\n(%s)\n" "$BASE_IMAGE" "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
 }
 
