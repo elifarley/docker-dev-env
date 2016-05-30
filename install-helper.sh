@@ -80,8 +80,14 @@ install_timezone() {
     echo "TZ is not set"
     return 1
   }
-  os_version | grep Alpine && install_timezone_alpine "$@"
-  os_version | grep Debian && install_timezone_debian "$@"
+  os_version | grep Alpine && {
+    install_timezone_alpine "$@" || return $?
+    return 0
+  }
+  os_version | grep Debian && {
+    install_timezone_debian "$@" || return $?
+    return 0
+  }
   os_version && return 1
 }
 
@@ -95,8 +101,14 @@ install_timezone_alpine() {
 }
 
 install_pkg() {
-  os_version | grep Alpine && { install_pkg_alpine "$@" || return $? ;}
-  os_version | grep Debian && { install_pkg_debian "$@" || return $? ;}
+  os_version | grep Alpine && {
+    install_pkg_alpine "$@" || return $?
+    return 0
+  }
+  os_version | grep Debian && {
+    install_pkg_debian "$@" || return $? 
+    return 0
+  }
   os_version && return 1
 }
 
