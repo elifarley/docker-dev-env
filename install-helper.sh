@@ -86,6 +86,9 @@ install() {
     gosu)
       install_gosu "$@"
       ;;
+    maven-3)
+      install_maven_3 "$@"
+      ;;
     *)
       invalid_cmd "$arg" "$@"
   esac
@@ -116,7 +119,26 @@ install_gosu() {
   local version="$1"; shift
   local sha="$1"; shift
   curl -fsSL https://github.com/tianon/gosu/releases/download/"$version"/gosu-amd64 -o /bin/gosu && \
-chmod 755 /bin/gosu && echo "$sha  /bin/gosu" | sha1sum -wc -
+    chmod 755 /bin/gosu && echo "$sha  /bin/gosu" | sha1sum -wc -
+}
+
+install_maven_3() {
+
+  test $# -ge 2 || {
+    echo "Usage: $0 install maven-3 <version> <sha1> [<prefix>=/usr/local]"
+    return 1
+  }
+
+  local version="$1"; shift
+  local sha="$1"; shift
+  local prefix="${1:-/usr/local}"; shift
+
+  curl -fsSL http://www-us.apache.org/dist/maven/maven-3/"$version"/binaries/apache-maven-"$version"-bin.tar.gz \
+    -o /tmp/maven.tgz && echo "$sha  /tmp/maven.tgz" | sha1sum -wc - && \
+    tar -xzf /tmp/maven.tgz -C "$prefix" && rm /tmp/maven.tgz || return $?
+  ln -s apache-maven-"$version" "$prefix"/maven-3 && \
+  ln -s ../maven-3/bin/mvn ../maven-3/bin/mvnDebug ../maven-3/bin/mvnyjp "$prefix"/bin
+
 }
 
 install_timezone() {
