@@ -20,15 +20,6 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/install-helper.sh && \
-  install-helper.sh save-image-info && \
-  install-helper.sh install timezone && \
-  install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
-  install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
-  install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
-  install-helper.sh cleanup
-
 # --- Configure SSHD ---
 RUN sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp && \
 printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\nUseDNS no\nPrintMotd no\n\n#---\n" > /etc/ssh/sshd_config && \
@@ -36,11 +27,20 @@ cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.
   cp -a /etc/ssh /etc/ssh.cache
 # --- Configure SSHD ---
 
+ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/install-helper.sh && \
+  install-helper.sh save-image-info
+RUN \
+  install-helper.sh install timezone && \
+  install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
+  install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
+  install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
+  install-helper.sh cleanup
+
 RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
   { getent group "sudo" || addgroup -S sudo ;} && echo '%sudo   ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
   gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh && \
-  echo -ne "BASE_IMAGE: $BASE_IMAGE\n$(cat /etc/issue | head -n1)\n($(uname -rsv))\n" >> /$HOME/docker-image.info
+  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
 # OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
 
 RUN chown -R $_USER:$_USER "$HOME"
