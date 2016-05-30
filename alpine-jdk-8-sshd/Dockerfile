@@ -1,6 +1,6 @@
 FROM alpine:3.3
 MAINTAINER Elifarley <elifarley@gmail.com>
-ENV BASE_IMAGE=java:openjdk-8-jdk-alpine
+ENV BASE_IMAGE=alpine:3.3
 
 ENV \
 TZ=${TZ:-Brazil/East} \
