@@ -121,7 +121,7 @@ install_timezone() {
 }
 
 install_timezone_alpine() {
-  apk --update add --no-cache tzdata || return $?
+  apk add --no-cache tzdata || return $?
   echo "TZ set to '$TZ'"
   echo $TZ > /etc/TZ
   cp -a /usr/share/zoneinfo/"$TZ" /etc/localtime || return $?
@@ -143,7 +143,7 @@ install_pkg() {
 install_pkg_alpine() {
   grep -q 'testing' /etc/apk/repositories || \
     echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-  apk --update add --no-cache "$@"
+  apk add --no-cache "$@"
 }
 
 configure() {
