@@ -22,14 +22,16 @@ WORKDIR $HOME
 
 ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/install-helper.sh && \
-  install-helper.sh save-image-info
-RUN \
+  install-helper.sh update-pkg-list && \
   install-helper.sh install timezone && \
+  install-helper.sh save-image-info && \
   install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
+  install-helper.sh cleanup
+
+RUN \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
   install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
-  install-helper.sh configure sshd && \
-  install-helper.sh cleanup
+  install-helper.sh configure sshd
 
 RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
   { getent group "sudo" || addgroup -S sudo ;} && echo '%sudo   ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
