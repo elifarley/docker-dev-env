@@ -1,6 +1,6 @@
-FROM alpine:3.3
+FROM frolvlad/alpine-oraclejdk8:cleaned
 MAINTAINER Elifarley <elifarley@gmail.com>
-ENV BASE_IMAGE=alpine:3.3
+ENV BASE_IMAGE=frolvlad/alpine-oraclejdk8:cleaned
 
 ENV \
 TZ=${TZ:-Brazil/East} \
