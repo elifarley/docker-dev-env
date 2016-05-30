@@ -26,10 +26,6 @@ test "$project_root" || exec ssh -o StrictHostKeyChecking=no -p2200 app@localhos
 project_root="$(readlink -f "$project_root")"
 project_name="$(basename "$project_root")"
 
-docker pull "$IMAGE"
-
-docker rm -f "$image_suffix"
-
 DDE_BASH_HISTORY=~/.dde/bash-history-"$project_name"
 DDE_VIMINFO=~/.dde/viminfo
 DDE_UNDOFILES=~/.dde/vim-undofiles-"$project_name"
@@ -49,6 +45,8 @@ test -f ~/.docker/config.json && MOUNT_DOCKER="$MOUNT_DOCKER
 -v $HOME/.docker/config.json:/mnt-ssh-config/docker-config.json:ro
 "
 
+docker pull "$IMAGE"
+docker rm -f "$image_suffix"
 exec docker run --name "$image_suffix" --hostname "$project_name" \
 -d \
 -p 2200:2200 -p 3000:3000 \
