@@ -20,13 +20,6 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-# --- Configure SSHD ---
-RUN sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp && \
-printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\nUseDNS no\nPrintMotd no\n\n#---\n" > /etc/ssh/sshd_config && \
-cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config && rm /etc/ssh/sshd_config.tmp && \
-  cp -a /etc/ssh /etc/ssh.cache
-# --- Configure SSHD ---
-
 ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/install-helper.sh && \
   install-helper.sh save-image-info
@@ -35,6 +28,7 @@ RUN \
   install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
   install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
+  install-helper.sh configure sshd && \
   install-helper.sh cleanup
 
 RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
