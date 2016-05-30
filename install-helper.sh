@@ -123,9 +123,19 @@ install_pkg_alpine() {
 }
 
 cleanup() {
+
   rm -rf /var/tmp/* /tmp/* || return $?
-  os_version | grep Alpine && cleanup_alpine "$@"
-  os_version | grep Debian && cleanup_debian "$@"
+
+  os_version | grep Alpine && {
+    cleanup_alpine "$@" || return $?
+    return 0
+  }
+
+  os_version | grep Debian && {
+    cleanup_debian "$@" || return $?
+    return 0
+  }
+
 }
 
 cleanup_alpine() {
