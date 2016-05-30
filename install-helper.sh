@@ -102,8 +102,7 @@ install_timezone_alpine() {
   echo "TZ set to '$TZ'"
   echo $TZ > /etc/TZ
   cp -a /usr/share/zoneinfo/"$TZ" /etc/localtime || return $?
-  apk del tzdata || return $?
-  cleanup
+  apk del tzdata
 }
 
 install_pkg() {
