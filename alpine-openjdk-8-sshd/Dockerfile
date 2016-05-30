@@ -21,7 +21,8 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 WORKDIR $HOME
 
 ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
-RUN install-helper.sh install timezone && \
+RUN chmod +x /usr/local/bin/install-helper.sh && \
+  install-helper.sh install timezone && \
   install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
   install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
