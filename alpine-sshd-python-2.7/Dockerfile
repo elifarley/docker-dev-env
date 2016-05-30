@@ -1,6 +1,10 @@
 FROM elifarley/docker-dev-env:alpine-sshd
 MAINTAINER elifarley@gmail.com
+ENV BASE_IMAGE=elifarley/docker-dev-env:alpine-sshd
 
-RUN apk --update add mercurial git unzip \
-  python py-pip py-setuptools && \
-  rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+RUN \
+  install-helper.sh save-image-info && \
+  install-helper.sh update-pkg-list && \
+  install-helper.sh install-pkg add mercurial git unzip \
+    python py-pip py-setuptools && \
+  install-helper.sh cleanup
