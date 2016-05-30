@@ -49,9 +49,6 @@ install() {
     gosu)
       install_gosu "$@"
       ;;
-    save-image-info)
-      save_image_info "$@"
-      ;;
     *)
       invalid_cmd "$cmd" "$@"
   esac
