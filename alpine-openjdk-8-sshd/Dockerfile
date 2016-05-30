@@ -26,20 +26,14 @@ RUN chmod +x /usr/local/bin/install-helper.sh && \
   install-helper.sh install timezone && \
   install-helper.sh save-image-info && \
   install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
+  install-helper.sh configure sshd && \
   install-helper.sh cleanup
 
 RUN \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
   install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
-  install-helper.sh configure sshd
 
-RUN adduser -D -h "$HOME" -s /bin/bash $_USER && \
-  { getent group "sudo" || addgroup -S sudo ;} && echo '%sudo   ALL=(ALL:ALL) ALL' >> /etc/sudoers && \
-  gpasswd -a $_USER sudo && printf "$_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p $HOME/.ssh && chmod go-w $HOME && chmod 700 $HOME/.ssh
-# OR echo 'auth requisite  pam_deny.so' > /etc/pam.d/su
-
-RUN chown -R $_USER:$_USER "$HOME"
+RUN add_user "$_USER"
 
 RUN curl -fsSL https://raw.githubusercontent.com/elifarley/docker-dev-env/master/entry.sh -o /entry.sh && \
   chmod +x /entry.sh && \
