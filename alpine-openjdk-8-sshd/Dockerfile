@@ -26,12 +26,12 @@ RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories 
   rm -rf /var/cache/apk/*
 
 # Use tini as subreaper in Docker container to adopt zombie processes 
-ADD https://github.com/krallin/tini/releases/download/"$TINI_VERSION"/tini-static /bin/tini
-RUN chmod +x /bin/tini && echo "$TINI_SHA  /bin/tini" | sha1sum -wc -
+RUN curl -fsSL https://github.com/krallin/tini/releases/download/"$TINI_VERSION"/tini-static -o /bin/tini && \
+chmod +x /bin/tini && echo "$TINI_SHA  /bin/tini" | sha1sum -wc -
 
 # Grab gosu for easy step-down from root.
-ADD https://github.com/tianon/gosu/releases/download/"$GOSU_VERSION"/gosu-amd64 /bin/gosu
-RUN chmod 755 /bin/gosu && echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
+RUN curl -fsSL https://github.com/tianon/gosu/releases/download/"$GOSU_VERSION"/gosu-amd64 -o /bin/gosu && \
+chmod 755 /bin/gosu && echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
 
 # --- Configure SSHD ---
 RUN sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp && \
