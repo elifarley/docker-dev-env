@@ -6,6 +6,9 @@ export IMAGE_INFO_FILE="$HOME"/docker-image.info
 main() {
   local cmd="$1"; shift
   case "$cmd" in
+    update-pkg-list)
+      update_pkg_list "$@"
+      ;;
     install-pkg)
       install_pkg "$@"
       ;;
@@ -27,7 +30,7 @@ main() {
 }
 
 invalid_cmd() {
-  echo "Usage: $0 install-pkg|install|save-image-info|configure|cleanup"
+  echo "Usage: $0 update-pkg-list|install-pkg|install|save-image-info|configure|cleanup"
 }
 
 os_version() { (
@@ -40,6 +43,26 @@ os_version() { (
 save_image_info() {
   date +'%F-%T.%N %Z' >> "$IMAGE_INFO_FILE"
   printf "BASE_IMAGE: %s\n%s\n(%s)\n" "$BASE_IMAGE" "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
+}
+
+update_pkg_list() {
+
+  os_version | grep Alpine && {
+    update_pkg_list_alpine "$@" || return $?
+    return 0
+  }
+
+  os_version | grep Debian && {
+    update_pkg_list_debian "$@" || return $?
+    return 0
+  }
+
+  os_version && return 1
+
+}
+
+update_pkg_list_alpine() {
+  apk update
 }
 
 install() {
