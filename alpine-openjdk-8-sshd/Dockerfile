@@ -31,7 +31,7 @@ RUN chmod +x /usr/local/bin/install-helper.sh && \
 
 RUN \
   install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
-  install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
+  install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA"
 
 RUN add_user "$_USER"
 
