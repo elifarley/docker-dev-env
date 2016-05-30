@@ -52,6 +52,7 @@ save_image_info() {
   printf 'Build date: %s %s\n' "$(date +'%F %T.%N')" "$(date +%Z)" >> "$IMAGE_INFO_FILE"
   printf "Base image: $BASE_IMAGE\n" >> "$IMAGE_INFO_FILE"
   test "$first_time" && printf '%s\n(%s)\n' "$(os_version)" "$(uname -rsv)" >> "$IMAGE_INFO_FILE"
+  return 0
 }
 
 update_pkg_list() {
