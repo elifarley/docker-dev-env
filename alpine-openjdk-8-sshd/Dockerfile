@@ -20,18 +20,12 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
-  apk --update add --no-cache ca-certificates curl openssh rsync tzdata ttf-dejavu sudo shadow bash && \
-  echo "TZ set to '$TZ'" && echo $TZ > /etc/TZ && cp -a /usr/share/zoneinfo/"$TZ" /etc/localtime && apk del tzdata && \
-  rm -rf /var/cache/apk/*
-
-# Use tini as subreaper in Docker container to adopt zombie processes 
-RUN curl -fsSL https://github.com/krallin/tini/releases/download/"$TINI_VERSION"/tini-static -o /bin/tini && \
-chmod +x /bin/tini && echo "$TINI_SHA  /bin/tini" | sha1sum -wc -
-
-# Grab gosu for easy step-down from root.
-RUN curl -fsSL https://github.com/tianon/gosu/releases/download/"$GOSU_VERSION"/gosu-amd64 -o /bin/gosu && \
-chmod 755 /bin/gosu && echo "$GOSU_SHA  /bin/gosu" | sha1sum -wc -
+ADD https://raw.githubusercontent.com/elifarley/docker-dev-env/master/install-helper.sh /usr/local/bin
+RUN install-helper.sh install timezone && \
+  install-helper.sh install-pkg ca-certificates curl openssh rsync ttf-dejavu sudo shadow bash && \
+  install-helper.sh install tini "$TINI_VERSION" "$TINI_SHA" && \
+  install-helper.sh install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
+  install-helper.sh cleanup
 
 # --- Configure SSHD ---
 RUN sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp && \
