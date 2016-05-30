@@ -15,6 +15,9 @@ main() {
     save-image-info)
       save_image_info "$@"
       ;;
+    configure)
+      configure "$@"
+      ;;
     cleanup)
       cleanup "$@"
       ;;
@@ -24,7 +27,7 @@ main() {
 }
 
 invalid_cmd() {
-  echo "Usage: $0 install-pkg|install|save-image-info|cleanup"
+  echo "Usage: $0 install-pkg|install|save-image-info|configure|cleanup"
 }
 
 os_version() { (
@@ -52,7 +55,7 @@ install() {
       install_gosu "$@"
       ;;
     *)
-      invalid_cmd "$cmd" "$@"
+      invalid_cmd "$arg" "$@"
   esac
 }
 
@@ -119,6 +122,39 @@ install_pkg_alpine() {
   grep -q 'testing' /etc/apk/repositories || \
     echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
   apk --update add --no-cache "$@"
+}
+
+configure() {
+  local arg="$1"; shift
+  case "$arg" in
+    sshd)
+      configure_sshd "$@"
+      ;;
+    *)
+      invalid_cmd "$arg" "$@"
+  esac
+}
+
+configure_sshd() {
+  os_version | grep Alpine && {
+    configure_sshd_alpine "$@" || return $?
+    return 0
+  }
+  os_version | grep Debian && {
+    configure_sshd_debian "$@" || return $? 
+    return 0
+  }
+  os_version && return 1
+}
+
+configure_sshd_alpine() {
+  sed -e '/Port/d;/UsePrivilegeSeparation/d;/PermitRootLogin/d;/PermitUserEnvironment/d;/UsePAM/d;/UseDNS/d;/PasswordAuthentication/d;/ChallengeResponseAuthentication/d;/Banner/d;/PrintMotd/d;/PrintLastLog/d' \
+    /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp || return $?
+  printf "\nPort 2200\nUsePrivilegeSeparation no\nPermitRootLogin no\nPasswordAuthentication no\nChallengeResponseAuthentication no\nPermitUserEnvironment yes\nUseDNS no\nPrintMotd no\n\n#---\n" \
+    > /etc/ssh/sshd_config || return $?
+  cat /etc/ssh/sshd_config.tmp >> /etc/ssh/sshd_config || return $?
+  rm /etc/ssh/sshd_config.tmp || return $?
+  cp -a /etc/ssh /etc/ssh.cache
 }
 
 cleanup() {
