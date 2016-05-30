@@ -1,6 +1,6 @@
-ENV BASE_IMAGE=java:openjdk-8-jdk-alpine
-FROM "$BASE_IMAGE"
+FROM java:openjdk-8-jdk-alpine
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
+ENV BASE_IMAGE=java:openjdk-8-jdk-alpine
 
 ENV \
 TZ=${TZ:-Brazil/East} \
