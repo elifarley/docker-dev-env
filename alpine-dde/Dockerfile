@@ -12,8 +12,6 @@ RUN \
   (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) && \
   xinstall cleanup
 
-ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
-
 RUN curl -fsSL https://github.com/elifarley/shellbase/archive/1.0.9.tar.gz \
   | tar --exclude README.md --exclude LICENSE --strip=1 --overwrite -zxvC "$HOME" && \
   sed -i '/^set listchars=tab/d' "$HOME"/.vimrc && \
