@@ -20,8 +20,9 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-ADD https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh /tmp/cross-installer.sh
-RUN sh /tmp/cross-installer.sh /usr/local && \
+ADD https://github.com/elifarley/cross-installer/archive/master.tar.gz /tmp
+RUN echo "dir:" && ls -Falk /tmp /tmp/cross-installe*
+RUN sh /tmp/cross-installer*/install.sh /usr/local && \
   xinstall update-pkg-list && \
   xinstall install timezone && \
   xinstall save-image-info && \
