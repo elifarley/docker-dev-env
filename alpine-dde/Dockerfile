@@ -2,13 +2,15 @@ FROM elifarley/docker-dev-env:alpine-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 ENV BASE_IMAGE=elifarley/docker-dev-env:alpine-sshd
 
+ENV APK_PACKAGES='tar sed vim less findutils git build-base'
+
 RUN \
-  install-helper.sh save-image-info && \
-  install-helper.sh update-pkg-list && \
-  install-helper.sh install-pkg tar sed vim less findutils git build-base && \
+  xinstall save-image-info && \
+  xinstall update-pkg-list && \
+  xinstall install-pkg && \
   curl -fsSL http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz | tar -zxC /tmp && \
   (cd /tmp/ctags-5.8 && ./configure && make && make install && cd && apk del build-base && rm -rf /tmp/*) && \
-  install-helper.sh cleanup
+  xinstall cleanup
 
 ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
 
