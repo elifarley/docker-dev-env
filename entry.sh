@@ -12,12 +12,14 @@ SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
 MNT_DIR="${MNT_DIR:-/data}"
 
 # Copy default config from cache
-test "$(ls -A /etc/ssh)" || \
-   cp -a /etc/ssh.cache/* /etc/ssh/
+test "$(ls -A /etc/ssh)" || {
+  test "$(ls -A /etc/ssh.cache)" && cp -a /etc/ssh.cache/* /etc/ssh/
+}
 
 # Generate Host keys, if required
-test "$(ls -A /etc/ssh/ssh_host_*)" || \
-    ssh-keygen -A
+test "$(ls -A /etc/ssh/ssh_host_*)" || {
+  which ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
+}
 
 test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
 # Fix permissions, if writable
