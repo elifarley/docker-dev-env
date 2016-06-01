@@ -33,3 +33,11 @@ RUN \
 RUN xinstall add-user "$_USER"
 
 RUN xinstall install-base
+
+COPY $_USER.sh $HOME/
+
+ONBUILD EXPOSE 8080
+
+ONBUILD COPY . "$HOME"/
+ONBUILD RUN npm install
+ONBUILD RUN chown -R nobody:nogroup "$HOME" && chmod -f +x "$HOME"/app.sh
