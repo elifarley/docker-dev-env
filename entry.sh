@@ -2,29 +2,31 @@
 CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 set -e
 
+test "$DEBUG" && set -x
+
 test -r "$CMD_BASE"/env-vars.sh && \
   . "$CMD_BASE"/env-vars.sh
-
-test "$DEBUG" == 'true' && set -x
 
 DAEMON="${DAEMON:-sshd}"
 SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
 MNT_DIR="${MNT_DIR:-/data}"
 
+dir_not_empty() { test "$(ls -A "$@" 2>/dev/null)" ;}
+
 # Copy default config from cache
-test "$(ls -A /etc/ssh)" || {
-  test "$(ls -A /etc/ssh.cache)" && cp -a /etc/ssh.cache/* /etc/ssh/
+dir_not_empty /etc/ssh || {
+  dir_not_empty /etc/ssh.cache && cp -a /etc/ssh.cache/* /etc/ssh/
 }
 
 # Generate Host keys, if required
-test "$(ls -A /etc/ssh/ssh_host_*)" || {
+dir_not_empty /etc/ssh/ssh_host_* || {
   which ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
 }
 
 test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
 # Fix permissions, if writable
 test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
-  test -d "$SSH_CONFIG_VOLUME" && test "$(ls -A "$SSH_CONFIG_VOLUME")" && cp -a "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
+  dir_not_empty "$SSH_CONFIG_VOLUME" && cp -a "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
   chown -R $_USER:$_USER "$HOME"/.ssh && chmod -R 600 "$HOME"/.ssh && chmod 700 "$HOME"/.ssh
 }
 
