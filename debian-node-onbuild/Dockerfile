@@ -15,7 +15,7 @@ ENV HOME=/$_USER JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
 EXPOSE 8080
 
 ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
-CMD ["node"]
+CMD ["/app/app.sh"]
 
 WORKDIR $HOME
 
@@ -40,4 +40,4 @@ ONBUILD EXPOSE 8080
 
 ONBUILD COPY . "$HOME"/
 ONBUILD RUN npm install
-ONBUILD RUN chown -R nobody:nogroup "$HOME" && chmod -f +x "$HOME"/app.sh
+ONBUILD RUN chown -R "$_USER":nogroup "$HOME" && chmod -f +x "$HOME"/app.sh
