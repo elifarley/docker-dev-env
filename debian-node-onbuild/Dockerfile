@@ -36,8 +36,6 @@ RUN xinstall install-base
 
 COPY $_USER.sh $HOME/
 
-ONBUILD EXPOSE 8080
-
 ONBUILD COPY . "$HOME"/
 ONBUILD RUN npm install
 ONBUILD RUN chown -R "$_USER":nogroup "$HOME" && chmod -f +x "$HOME"/app.sh
