@@ -34,7 +34,7 @@ RUN xinstall install-base
 
 COPY $_USER.sh $HOME/
 
-ONBUILD ADD artifacts.tgz "$HOME"/
+ONBUILD ADD app.tgz "$HOME"/
 ONBUILD RUN \
   xinstall save-image-info && \
   chown -R "$_USER":nogroup "$HOME" && chmod +x "$HOME"/app.sh
