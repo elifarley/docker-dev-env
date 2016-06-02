@@ -12,5 +12,5 @@ gcc g++ make patch binutils libc6-dev \
 
 RUN \
   xinstall save-image-info && \
-  xinstall install maven 3.3.9 '5b4c117854921b527ab6190615f9435da730ba05' && \
+  xinstall install maven3 3.3.9 '5b4c117854921b527ab6190615f9435da730ba05' && \
   xinstall cleanup
