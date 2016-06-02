@@ -22,7 +22,6 @@ ADD https://github.com/elifarley/cross-installer/archive/master.tar.gz /tmp/cros
 ADD https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh /tmp/cross-installer.sh
 RUN sh /tmp/cross-installer.sh /usr/local && \
   xinstall save-image-info && \
-  xinstall install node $NODE_VERSION && \
   xinstall cleanup
 
 RUN \
