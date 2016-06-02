@@ -1,2 +1,5 @@
 #!/bin/bash -e
-exec node "$HOME"/app.js "$@"
+exec java \
+  -Dspring.profiles.active="$SPRING_PROFILE" \
+  -Djava.security.egd=file:/dev/urandom \
+  -jar "$HOME"/app.jar "$@"
