@@ -4,7 +4,6 @@ ENV BASE_IMAGE=elifarley/docker-dev-env:debian-sshd
 
 RUN \
   xinstall save-image-info && \
-  xinstall update-pkg-list && \
   xinstall install shellbasedeps && \
   xinstall install shellbase 1.0.9 && \
   xinstall install shellbasevimextra && \
