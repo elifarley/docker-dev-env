@@ -1,6 +1,12 @@
 FROM elifarley/docker-dev-env:debian-openjdk-8-sshd
 MAINTAINER elifarley@gmail.com
+ENV BASE_IMAGE=elifarley/docker-dev-env:debian-openjdk-8-sshd
 
-RUN apt-get install -y --no-install-recommends mercurial git unzip \
-python-pip python-setuptools && \
-apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS
+ENV APTGET_PACKAGES "mercurial git unzip \
+python-pip python-setuptools"
+
+RUN \
+  xinstall save-image-info && \
+  xinstall install-pkg && \
+  xinstall cleanup
+
