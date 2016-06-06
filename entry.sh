@@ -31,8 +31,22 @@ test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
   chown -R $_USER:$_USER "$HOME"/.ssh && chmod -R 600 "$HOME"/.ssh && chmod 700 "$HOME"/.ssh
 }
 
-test -r "$HOME"/.ssh/docker-config.json && \
-  mkdir -p "$HOME"/.docker && ln -sv ../.ssh/docker-config.json $HOME/.docker/config.json
+test -r "$HOME"/.ssh/docker-config.json && {
+
+  mkdir -p "$HOME"/.docker
+
+  test ! -f "$HOME"/.docker/config.json && \
+    ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json && \
+    return
+
+  echo "Docker config exists:"
+  ls -Falk "$HOME"/.docker/config.json
+  cat "$HOME"/.docker/config.json
+  echo "Unable to mount from other file:"
+  ls -Falk "$HOME"/.ssh/docker-config.json
+  cat "$HOME"/.ssh/docker-config.json
+
+}
 
 ak="$HOME"/.ssh/authorized_keys
 test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
