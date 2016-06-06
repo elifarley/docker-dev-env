@@ -26,6 +26,7 @@ RUN sh /tmp/cross-installer.sh /usr/local && \
   xinstall install timezone && \
   xinstall save-image-info && \
   xinstall install-pkg && \
+  xinstall install tar && \
   xinstall configure sshd && \
   xinstall cleanup
 
