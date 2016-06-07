@@ -4,6 +4,16 @@ set -e
 
 test "$DEBUG" && set -x
 
+test -f "$HOME"/image-build.log && echo "$HOME"/image-build.log && cat "$HOME"/image-build.log && echo
+
+test -f "$HOME"/build-info.txt && echo "$HOME"/build-info.txt && cat "$HOME"/build-info.txt && echo && {
+  . build-info.txt
+  while read -r line; do
+    test "$line" || continue
+    eval export $line
+  done < "$HOME"/build-info.txt
+}
+
 test -r "$CMD_BASE"/env-vars.sh && echo "Loading '$CMD_BASE/env-vars.sh'..." && \
   . "$CMD_BASE"/env-vars.sh
 
