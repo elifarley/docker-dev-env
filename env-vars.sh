@@ -3,6 +3,10 @@ set -e
 
 ENV_VARS_DIR="${ENV_VARS_DIR:-/mnt-env-vars}"
 PHUSION_ENV_DIR=/etc/container_environment
+SSH_ENVIRONMENT_FILE="$HOME"/.ssh/environment
+
+test -s "$HOME"/build-info.txt && \
+  cat "$HOME"/build-info.txt >> "$SSH_ENVIRONMENT_FILE"
 
 test -d "$ENV_VARS_DIR" && test "$(ls -A "$ENV_VARS_DIR")" || {
   echo "No env var files at '$ENV_VARS_DIR'"
@@ -16,7 +20,7 @@ process_env_file() {
   local name="$(basename "$env_file")"; local val="$(cat "$env_file")"
   echo "$name='$val'"
   test "$to_export" && export "$name"="$val"
-  printf "%s='%s'\n" "$name" "$val" >> "$HOME"/.ssh/environment
+  printf "%s='%s'\n" "$name" "$val" >> "$SSH_ENVIRONMENT_FILE"
 }
 
 test -d "$PHUSION_ENV_DIR" && {
