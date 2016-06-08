@@ -4,7 +4,8 @@ default_cert_import_dir="${default_cert_import_dir:-/mnt-ssh-config/certs}"
 default_keystore="${default_keystore:"$JAVA_HOME"/jre/lib/security/cacerts}"
 
 keytool_import_certs() {
-  local cert_import_dir="${1:$default_cert_import_dir}"
+  local cert_import_dir="$1"; test "$1" = '--' && cert_import_dir=''
+  cert_import_dir="${cert_import_dir:$default_cert_import_dir}"
   local storepass="${2:changeit}"
   local keystore="${3:$default_keystore}"
 
