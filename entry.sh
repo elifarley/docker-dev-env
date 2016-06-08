@@ -2,26 +2,11 @@
 CMD_BASE="$(readlink -f $0)" || CMD_BASE="$0"; CMD_BASE="$(dirname $CMD_BASE)"
 set -e
 
+dir_not_empty() { test "$(ls -A "$@" 2>/dev/null)" ;}
+
 test "$DEBUG" && set -x
 
 test -f "$HOME"/image-build.log && echo "$HOME"/image-build.log && cat "$HOME"/image-build.log && echo
-
-test -f "$HOME"/build-info.txt && echo "$HOME"/build-info.txt && cat "$HOME"/build-info.txt && echo && {
-  . build-info.txt
-  while read -r line; do
-    test "$line" || continue
-    eval export $line
-  done < "$HOME"/build-info.txt
-}
-
-test -r "$CMD_BASE"/env-vars.sh && \
-  . "$CMD_BASE"/env-vars.sh
-
-DAEMON="${DAEMON:-sshd}"
-SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
-MNT_DIR="${MNT_DIR:-/data}"
-
-dir_not_empty() { test "$(ls -A "$@" 2>/dev/null)" ;}
 
 # Copy default config from cache
 dir_not_empty /etc/ssh || {
@@ -34,12 +19,23 @@ dir_not_empty /etc/ssh/ssh_host_* || {
   which ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
 }
 
+SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
+
 test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
 # Fix permissions, if writable
 test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
+  touch "$HOME"/.ssh/environment || return
   dir_not_empty "$SSH_CONFIG_VOLUME" && cp -av "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
   chown -R $_USER:$_USER "$HOME"/.ssh && chmod -R 600 "$HOME"/.ssh && chmod 700 "$HOME"/.ssh
 }
+
+test -f "$HOME"/build-info.txt && echo "$HOME"/build-info.txt && cat "$HOME"/build-info.txt && echo
+
+test -r "$CMD_BASE"/env-vars.sh && \
+  . "$CMD_BASE"/env-vars.sh
+
+DAEMON="${DAEMON:-sshd}"
+MNT_DIR="${MNT_DIR:-/data}"
 
 test -r "$HOME"/.ssh/docker-config.json && {
   mkdir -p "$HOME"/.docker
