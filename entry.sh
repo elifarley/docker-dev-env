@@ -14,7 +14,7 @@ test -f "$HOME"/build-info.txt && echo "$HOME"/build-info.txt && cat "$HOME"/bui
   done < "$HOME"/build-info.txt
 }
 
-test -r "$CMD_BASE"/env-vars.sh && echo "Loading '$CMD_BASE/env-vars.sh'..." && \
+test -r "$CMD_BASE"/env-vars.sh && \
   . "$CMD_BASE"/env-vars.sh
 
 DAEMON="${DAEMON:-sshd}"
@@ -62,6 +62,9 @@ ak="$HOME"/.ssh/authorized_keys
 test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
   echo "$ak:"; cat "$ak"
 }
+
+test -x /keytool-import-certs.sh && dir_not_empty "$SSH_CONFIG_VOLUME"/certs && \
+  /keytool-import-certs.sh --
 
 echo "[$_USER] Running $@"
 
