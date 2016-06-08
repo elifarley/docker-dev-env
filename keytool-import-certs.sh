@@ -10,14 +10,21 @@ keytool_import_certs() {
   local keystore="${3:$default_keystore}"
 
   test -d "$cert_import_dir" && test "$(ls -A "$cert_import_dir" 2>/dev/null)" || {
-    echo "No certificates found at '$cert_import_dir'"
+    echo "No certificates to import at '$cert_import_dir'"
     return 1
   }
 
+  echo "Importing certificates from '$cert_import_dir' into '$keystore'"
+  local count=0
   for cert in "$cert_import_dir"/*; do
-    exec keytool -import -file "$cert" -alias "$(basename "$cert")" -noprompt -storepass "$storepass" \
+    echo "Importing '$(basename "$cert")'..."
+    keytool -import -file "$cert" -alias "$(basename "$cert")" -noprompt -storepass "$storepass" \
     -keystore "$keystore" || return
+    count=$((count + 1))
   done
+
+  local msg="$count certificate"; test $count -gt 1 && msg="${msg}s"
+  echo "$msg imported."
 }
 
 keytool_import_certs_interactive() {
