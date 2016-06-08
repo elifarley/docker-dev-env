@@ -42,20 +42,9 @@ test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
 }
 
 test -r "$HOME"/.ssh/docker-config.json && {
-
   mkdir -p "$HOME"/.docker
-
-  test ! -f "$HOME"/.docker/config.json && \
-    ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json && \
-    return
-
-  echo "Docker config exists:"
-  ls -Falk "$HOME"/.docker/config.json
-  cat "$HOME"/.docker/config.json
-  echo "Unable to mount from other file:"
-  ls -Falk "$HOME"/.ssh/docker-config.json
-  cat "$HOME"/.ssh/docker-config.json
-
+  test -f "$HOME"/.docker/config.json || \
+    ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json
 }
 
 ak="$HOME"/.ssh/authorized_keys
