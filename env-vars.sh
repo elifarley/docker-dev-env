@@ -16,7 +16,7 @@ test -d "$PHUSION_ENV_DIR" && {
 }
 
 echo "Loading env var files from '$ENV_VARS_DIR'..."
-for v in "$ENV_VARS_DIR"/* do;
+for v in "$ENV_VARS_DIR"/*; do
   echo "$(basename "$v")"="$(cat "$v")"
   export "$(basename "$v")"="$(cat "$v")"
 done
