@@ -6,7 +6,28 @@ dir_not_empty() { test "$(ls -A "$@" 2>/dev/null)" ;}
 
 test "$DEBUG" && set -x
 
-test -f "$HOME"/image-build.log && echo "$HOME"/image-build.log && cat "$HOME"/image-build.log && echo
+test -f "$HOME"/image-build.log && echo "$HOME/image-build.log:" && cat "$HOME"/image-build.log && echo
+
+SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
+
+test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
+# Fix permissions, if writable
+test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
+  touch "$HOME"/.ssh/environment || return
+  dir_not_empty "$SSH_CONFIG_VOLUME" && cp -av "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
+  chown -R $_USER:$_USER "$HOME"/.ssh && chmod -R 600 "$HOME"/.ssh && chmod 700 "$HOME"/.ssh
+}
+
+test -f "$HOME"/build-info.txt && echo "$HOME/build-info.txt:" && cat "$HOME"/build-info.txt && echo
+
+test -r "$CMD_BASE"/env-vars.sh && \
+  . "$CMD_BASE"/env-vars.sh
+
+test -r "$HOME"/.ssh/docker-config.json && {
+  mkdir -p "$HOME"/.docker
+  test -f "$HOME"/.docker/config.json || \
+    ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json
+}
 
 # Copy default config from cache
 dir_not_empty /etc/ssh || {
@@ -19,39 +40,13 @@ dir_not_empty /etc/ssh/ssh_host_* || {
   which ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
 }
 
-SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
-
-test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
-# Fix permissions, if writable
-test ! -w "$HOME"/.ssh && echo "WARNING: '$HOME/.ssh' is not writeable" || {
-  touch "$HOME"/.ssh/environment || return
-  dir_not_empty "$SSH_CONFIG_VOLUME" && cp -av "$SSH_CONFIG_VOLUME"/* "$HOME"/.ssh
-  chown -R $_USER:$_USER "$HOME"/.ssh && chmod -R 600 "$HOME"/.ssh && chmod 700 "$HOME"/.ssh
-}
-
-test -f "$HOME"/build-info.txt && echo "$HOME"/build-info.txt && cat "$HOME"/build-info.txt && echo
-
-test -r "$CMD_BASE"/env-vars.sh && \
-  . "$CMD_BASE"/env-vars.sh
-
-DAEMON="${DAEMON:-sshd}"
-MNT_DIR="${MNT_DIR:-/data}"
-
-test -r "$HOME"/.ssh/docker-config.json && {
-  mkdir -p "$HOME"/.docker
-  test -f "$HOME"/.docker/config.json || \
-    ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json
-}
-
 ak="$HOME"/.ssh/authorized_keys
 test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
-  echo "$ak:"; cat "$ak"
+  printf "\n$ak:\n"; cat "$ak"; echo
 }
 
 test -x /keytool-import-certs.sh && dir_not_empty "$SSH_CONFIG_VOLUME"/certs && \
   /keytool-import-certs.sh --
-
-echo "[$_USER] Running $@"
 
 # If UID of docker.sock is not the same...
 test -S /var/run/docker.sock && test $(id -u $_USER) != $(stat -c "%u" /var/run/docker.sock) && {
@@ -61,6 +56,7 @@ test -S /var/run/docker.sock && test $(id -u $_USER) != $(stat -c "%u" /var/run/
   usermod -g "$docker_group" $_USER
 }
 
+MNT_DIR="${MNT_DIR:-/data}"
 if test -e "$MNT_DIR"; then
   echo "Changing UID to match '$MNT_DIR'..."
   usermod -u $(stat -c "%u" "$MNT_DIR") $_USER
@@ -70,6 +66,7 @@ else
 fi
 
 id $_USER
+echo "[$_USER] About to run: $*"
 
 # Allow running SSHD as non-root user
 if test root != "$_USER"; then
@@ -78,7 +75,11 @@ if test root != "$_USER"; then
     mkdir -p /var/run/sshd && chmod 0755 /var/run/sshd
 fi
 
-test "$(id -un)" = "$_USER" && echo exec "$@" && exec "$@"
+test "$(id -un)" = "$_USER" && \
+printf "exec $*
+---------------------------------\n
+" && exec "$@"
 
-echo exec gosu $_USER "$@"
-exec gosu $_USER "$@"
+printf "exec gosu '$_USER' $*
+---------------------------------\n
+" && exec gosu "$_USER" "$@"
