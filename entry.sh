@@ -29,6 +29,10 @@ test -r "$HOME"/.ssh/docker-config.json && {
     ln -sv ../.ssh/docker-config.json "$HOME"/.docker/config.json
 }
 
+export HOSTNAME="${HOSTNAME:-$BUILD_MONIKER}"
+echo "Hostname: changing from '$(cat /etc/hostname)' to ''..."
+echo "$HOSTNAME" > /etc/hostname
+
 # Copy default config from cache
 dir_not_empty /etc/ssh || {
   echo "/etc/ssh is empty."
