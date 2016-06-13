@@ -20,6 +20,7 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 WORKDIR $HOME
 
 ADD https://github.com/elifarley/cross-installer/archive/master.tar.gz /tmp/cross-installer.tgz
+ADD https://raw.githubusercontent.com/elifarley/shell-lib/master/lib/base.sh /usr/local/shell-lib/lib/base.sh
 ADD https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh /tmp/cross-installer.sh
 RUN sh /tmp/cross-installer.sh /usr/local && \
   xinstall update-pkg-list && \
