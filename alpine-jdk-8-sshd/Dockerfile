@@ -1,13 +1,12 @@
-FROM frolvlad/alpine-oraclejdk8:cleaned
+FROM elifarley/docker-alpine-oraclejdk8
 MAINTAINER Elifarley <elifarley@gmail.com>
-ENV BASE_IMAGE=frolvlad/alpine-oraclejdk8:cleaned
-
-ENV \
-APK_PACKAGES="ca-certificates curl openssh rsync sudo shadow bash" \
+ENV BASE_IMAGE=elifarley/docker-alpine-oraclejdk8 \
+\
+APK_PACKAGES="openssh rsync sudo shadow bash" \
 TINI_VERSION='v0.5.0' TINI_SHA=066ad710107dc7ee05d3aa6e4974f01dc98f3888 \
 GOSU_VERSION='1.5' GOSU_SHA=18cced029ed8f0bf80adaa6272bf1650ab68f7aa \
 _USER=app \
-LANG=en_US.UTF-8 TZ=${TZ:-Brazil/East} \
+TZ=${TZ:-Brazil/East} \
 TERM=xterm-256color
 ENV HOME=/$_USER JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
 
@@ -19,11 +18,7 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-ADD https://github.com/elifarley/cross-installer/archive/master.tar.gz /tmp/cross-installer.tgz
-ADD https://raw.githubusercontent.com/elifarley/shell-lib/master/lib/base.sh /usr/local/shell-lib/lib/base.sh
-ADD https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh /tmp/cross-installer.sh
-RUN sh /tmp/cross-installer.sh /usr/local && \
-  xinstall update-pkg-list && \
+RUN \
   xinstall install timezone && \
   xinstall save-image-info && \
   xinstall install-pkg && \
