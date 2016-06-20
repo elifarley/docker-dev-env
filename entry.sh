@@ -11,21 +11,23 @@ test -f "$HOME"/image-build.log && echo "$HOME/image-build.log:" && cat "$HOME"/
 SSH_CONFIG_VOLUME="${SSH_CONFIG_VOLUME:-/mnt-ssh-config}"
 
 # If UID of docker.sock is not the same...
-test -S /var/run/docker.sock && test $(id -u $_USER) != $(stat -c "%u" /var/run/docker.sock) && {
-  docker_group=$(stat -c "%g" /var/run/docker.sock)
-  getent group "$docker_group" || groupadd -g "$docker_group" docker
-  echo "Changing GID of '$_USER' to '$docker_group' so that it matches that of '/var/run/docker.sock'..."
-  usermod -g "$docker_group" $_USER
+test -S /var/run/docker.sock && test $(id -u "$_USER") != $(stat -c "%u" /var/run/docker.sock) && {
+  docker_gid=$(stat -c "%g" /var/run/docker.sock)
+  getent group "$docker_gid" || groupadd -g "$docker_gid" docker
+  test $docker_gid -ne $(id -g "$_USER") && \
+    echo "Changing GID of '$_USER' from '$(id -g "$_USER")' to '$docker_gid' so that it matches that of '/var/run/docker.sock'..." && \
+    usermod -g "$docker_gid" $_USER
 }
 
 MNT_DIR="${MNT_DIR:-/data}"
 if test -e "$MNT_DIR"; then
-  mnt_dir_uid="$(stat -c "%u" "$MNT_DIR")"
-  echo "Changing UID of '$_USER' to '$mnt_dir_uid' so that it matches that of '$MNT_DIR'..."
-  usermod -u "$mnt_dir_uid" "$_USER"
+  mnt_dir_uid=$(stat -c "%u" "$MNT_DIR")
+  test $mnt_dir_uid -ne $(id -u "$_USER") && \
+    echo "Changing UID of '$_USER' from '$(id -u "$_USER")' to '$mnt_dir_uid' so that it matches that of '$MNT_DIR'..." && \
+    usermod -u $mnt_dir_uid "$_USER"
 else
   echo "Creating '$MNT_DIR'..."
-  mkdir "$MNT_DIR" && chown $_USER:$_USER "$MNT_DIR"
+  mkdir "$MNT_DIR" && chown "$_USER:$_USER" "$MNT_DIR"
 fi
 
 test -d "$HOME"/.ssh || mkdir "$HOME"/.ssh
