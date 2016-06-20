@@ -13,6 +13,9 @@ test -s "$HOME"/build-info.txt && {
   done < "$HOME"/build-info.txt
 }
 
+test -d /etc/profile.d && test "$(ls -A /etc/profile.d)" && \
+  for v in /etc/profile.d/*; do . "$v"; done
+
 test -d "$ENV_VARS_DIR" && test "$(ls -A "$ENV_VARS_DIR")" || {
   echo "No env var files at '$ENV_VARS_DIR'"
   return
