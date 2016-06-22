@@ -1,5 +1,5 @@
 #!/bin/bash -e
+# See https://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
 exec java \
-  -Dspring.profiles.active="$SPRING_PROFILE" \
-  -Djava.security.egd=file:/dev/urandom \
+  -Djava.security.egd=file:/dev/./urandom \
   -jar "$HOME"/app.jar "$@"
