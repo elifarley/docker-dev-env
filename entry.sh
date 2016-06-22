@@ -72,7 +72,7 @@ test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
 }
 
 test -x /keytool-import-certs.sh && dir_not_empty "$SSH_CONFIG_VOLUME"/certs && \
-  /keytool-import-certs.sh --
+  /keytool-import-certs.sh --force
 
 id $_USER
 echo "[$_USER] About to run: $*"
