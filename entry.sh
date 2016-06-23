@@ -51,13 +51,14 @@ test -r "$HOME"/.ssh/docker-config.json && {
 
 test "$BUILD_MONIKER" && {
   echo "Hostname: changing from '$(cat /etc/hostname)' to '$BUILD_MONIKER'..."
-  echo "$BUILD_MONIKER" > /etc/hostname
-  hostname -F /etc/hostname || echo "Unable to change hostname"
+  hostname "$BUILD_MONIKER" && echo "$BUILD_MONIKER" > /etc/hostname || \
+    echo "Unable to change hostname."
 }
 
 # Copy default config from cache
 dir_not_empty /etc/ssh || {
-  echo "/etc/ssh is empty."
+  test -d /etc/ssh && \
+  echo "/etc/ssh is empty." && \
   dir_not_empty /etc/ssh.cache && cp -av /etc/ssh.cache/* /etc/ssh/
 }
 
@@ -71,18 +72,17 @@ test ! -f "$ak" && echo "WARNING: No SSH authorized_keys found at '$ak'" || {
   printf "\n$ak:\n"; cat "$ak"; echo
 }
 
+# Allow running SSHD as non-root user
+test root != "$_USER" && test -d /etc/ssh && \
+  chown -R $_USER:$_USER /etc/ssh && \
+  test ! -d /var/run/sshd && \
+    mkdir -p /var/run/sshd && chmod 0755 /var/run/sshd
+
 test -x /keytool-import-certs.sh && dir_not_empty "$SSH_CONFIG_VOLUME"/certs && \
   /keytool-import-certs.sh --force
 
 id $_USER
 echo "[$_USER] About to run: $*"
-
-# Allow running SSHD as non-root user
-if test root != "$_USER"; then
-  chown -R $_USER:$_USER /etc/ssh
-  test ! -d /var/run/sshd && \
-    mkdir -p /var/run/sshd && chmod 0755 /var/run/sshd
-fi
 
 test "$(id -un)" = "$_USER" && \
 printf "exec $*
