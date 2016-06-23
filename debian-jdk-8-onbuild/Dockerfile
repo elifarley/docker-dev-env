@@ -30,6 +30,7 @@ RUN xinstall install-base
 
 COPY $_USER.sh $HOME/
 
+ONBUILD ENV BASE_IMAGE=elifarley/docker-dev-env:debian-jdk-8-onbuild
 ONBUILD USER app
 ONBUILD COPY . "$HOME"/
 ONBUILD USER root
