@@ -13,7 +13,7 @@ deploy_image() {
   local image="$1"; shift
   local mount_env_vars env_vars_dir=~/"env-vars-$name"
   test -d "$env_vars_dir" && mount_env_vars=(-v "$env_vars_dir":/mnt-env-vars:ro)
-  docker pull "$image" || return $?
+  docker pull "$image" || return
   docker rm -f "$name" ||:
   docker run -d --name "$name" "$@" "${mount_env_vars[@]}" "$image"
 }
