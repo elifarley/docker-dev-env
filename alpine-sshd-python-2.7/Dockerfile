@@ -8,5 +8,5 @@ APK_PACKAGES="mercurial git unzip python py-pip py-setuptools"
 RUN \
   xinstall save-image-info && \
   xinstall update-pkg-list && \
-  xinstall install-pkg && \
+  xinstall add-pkg && \
   xinstall cleanup

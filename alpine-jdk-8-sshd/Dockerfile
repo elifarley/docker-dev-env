@@ -22,7 +22,7 @@ RUN \
   xinstall install timezone && \
   xinstall save-image-info && \
   xinstall update-pkg-list && \
-  xinstall install-pkg && \
+  xinstall add-pkg && \
   xinstall install tar && \
   xinstall configure sshd && \
   xinstall cleanup

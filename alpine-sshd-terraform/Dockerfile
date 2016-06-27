@@ -6,7 +6,7 @@ ENV TERRAFORM_VERSION=0.6.16
 RUN \
   install-helper.sh save-image-info && \
   install-helper.sh update-pkg-list && \
-  install-helper.sh install-pkg openssl groff less make && \
+  install-helper.sh add-pkg openssl groff less make && \
   install-helper.sh cleanup
 
 RUN \

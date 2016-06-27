@@ -25,7 +25,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/maste
   xinstall install timezone && \
   xinstall save-image-info && \
   xinstall install tar && \
-  xinstall install-pkg && \
+  xinstall add-pkg && \
   xinstall configure sshd && \
   xinstall cleanup
 

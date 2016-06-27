@@ -7,6 +7,6 @@ python-pip python-setuptools"
 
 RUN \
   xinstall save-image-info && \
-  xinstall install-pkg && \
+  xinstall add-pkg && \
   xinstall cleanup
 
