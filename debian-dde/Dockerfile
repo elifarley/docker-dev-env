@@ -6,7 +6,7 @@ APT_PACKAGES='mlocate'
 
 RUN \
   xinstall save-image-info && \
-  xinstall install-pkg && \
+  xinstall add-pkg && \
   xinstall install shellbasedeps && \
   xinstall install shellbase 1.0.9 && \
   xinstall install shellbasevimextra && \
