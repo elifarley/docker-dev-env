@@ -3,7 +3,7 @@ MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 ENV BASE_IMAGE=debian:jessie
 
 ENV \
-APTGET_PACKAGES="openssh-server sudo ca-certificates curl rsync" \
+APT_PACKAGES="openssh-server sudo ca-certificates curl rsync" \
 TINI_VERSION='v0.5.0' TINI_SHA=066ad710107dc7ee05d3aa6e4974f01dc98f3888 \
 GOSU_VERSION='1.5' GOSU_SHA=18cced029ed8f0bf80adaa6272bf1650ab68f7aa \
 _USER=app \

@@ -2,7 +2,7 @@ FROM elifarley/docker-dev-env:debian-openjdk-8-sshd
 MAINTAINER elifarley@gmail.com
 ENV BASE_IMAGE=elifarley/docker-dev-env:debian-openjdk-8-sshd
 
-ENV APTGET_PACKAGES "mercurial git unzip \
+ENV APT_PACKAGES "mercurial git unzip \
 python-pip python-setuptools"
 
 RUN \
