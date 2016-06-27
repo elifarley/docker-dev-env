@@ -19,14 +19,14 @@ WORKDIR $HOME
 
 RUN \
   xinstall save-image-info && \
-  xinstall install tar && \
-  xinstall install tini "$TINI_VERSION" "$TINI_SHA" && \
-  xinstall install gosu "$GOSU_VERSION" "$GOSU_SHA" && \
+  xinstall add tar && \
+  xinstall add tini "$TINI_VERSION" "$TINI_SHA" && \
+  xinstall add gosu "$GOSU_VERSION" "$GOSU_SHA" && \
   xinstall cleanup
 
 RUN xinstall add-user "$_USER"
 
-RUN xinstall install-base
+RUN xinstall add-base
 
 COPY $_USER.sh $HOME/
 

@@ -23,16 +23,16 @@ ADD https://github.com/elifarley/cross-installer/archive/master.tar.gz /tmp/cros
 ADD https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh /tmp/cross-installer.sh
 RUN sh /tmp/cross-installer.sh /usr/local && \
   xinstall save-image-info && \
-  xinstall install node $NODE_VERSION && \
+  xinstall add node $NODE_VERSION && \
   xinstall cleanup
 
 RUN \
-  xinstall install tini "$TINI_VERSION" "$TINI_SHA" && \
-  xinstall install gosu "$GOSU_VERSION" "$GOSU_SHA"
+  xinstall add tini "$TINI_VERSION" "$TINI_SHA" && \
+  xinstall add gosu "$GOSU_VERSION" "$GOSU_SHA"
 
 RUN xinstall add-user "$_USER"
 
-RUN xinstall install-base
+RUN xinstall add-base
 
 COPY $_USER.sh $HOME/
 

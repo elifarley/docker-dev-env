@@ -20,16 +20,16 @@ WORKDIR $HOME
 
 RUN apk --no-cache add ca-certificates curl && \
 curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
-  xinstall install timezone && \
+  xinstall add timezone && \
   xinstall save-image-info && \
   xinstall add-pkg && \
   xinstall configure sshd && \
   xinstall cleanup
 
 RUN \
-  xinstall install tini "$TINI_VERSION" "$TINI_SHA" && \
-  xinstall install gosu "$GOSU_VERSION" "$GOSU_SHA"
+  xinstall add tini "$TINI_VERSION" "$TINI_SHA" && \
+  xinstall add gosu "$GOSU_VERSION" "$GOSU_SHA"
 
 RUN xinstall add-user "$_USER"
 
-RUN xinstall install-base
+RUN xinstall add-base
