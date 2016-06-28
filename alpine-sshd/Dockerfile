@@ -19,7 +19,7 @@ CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
-RUN apk --no-cache add ca-certificates curl && \
+RUN apk --update add ca-certificates curl && \
 curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
   xinstall add timezone && \
   xinstall save-image-info && \
