@@ -31,9 +31,6 @@ RUN xinstall add-base
 COPY $_USER.sh $HOME/
 
 ONBUILD ENV BASE_IMAGE=elifarley/docker-dev-env:jdk-6-onbuild
-ONBUILD USER app
-ONBUILD ADD . "$HOME"/
-ONBUILD USER root
 ONBUILD RUN \
   xinstall save-image-info && \
   chmod +x "$HOME"/app.sh
