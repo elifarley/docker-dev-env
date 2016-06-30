@@ -20,6 +20,7 @@ WORKDIR $HOME
 RUN \
   xinstall save-image-info && \
   xinstall add tar && \
+  xinstall add-pkg sudo && \
   xinstall add tini "$TINI_VERSION" "$TINI_SHA" && \
   xinstall add gosu "$GOSU_VERSION" "$GOSU_SHA" && \
   xinstall cleanup
