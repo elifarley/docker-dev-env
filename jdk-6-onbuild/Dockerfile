@@ -28,7 +28,9 @@ RUN xinstall add-user "$_USER"
 
 RUN xinstall add-base
 
+USER "$_USER"
 COPY $_USER.sh $HOME/
+USER root
 
 ONBUILD ENV BASE_IMAGE=elifarley/docker-dev-env:jdk-6-onbuild
 ONBUILD RUN \
