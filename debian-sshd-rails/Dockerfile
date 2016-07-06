@@ -1,8 +1,6 @@
 FROM elifarley/docker-dev-env:debian-sshd
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
-
-#ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
-ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
+ENV BASE_IMAGE=elifarley/docker-dev-env:debian-sshd
 
 # --- Ruby ---
 ENV APT_PACKAGES "\
@@ -11,8 +9,8 @@ gcc g++ make patch binutils libc6-dev \
   libxslt1-dev libreadline-dev libsqlite3-dev \
   libpq-dev unixodbc unixodbc-dev unixodbc-bin ruby-odbc freetds-bin freetds-common freetds-dev postgresql-client \
  "
-
 RUN \
+  xinstall save-image-info && \
   xinstall add-pkg && \
   xinstall cleanup
 
@@ -21,6 +19,10 @@ ENV RUBY_VERSION "2.3.0"
 ENV RUBYGEMS_VERSION "2.5.2"
 
 WORKDIR /tmp
+
+#ENV RM_APT '/var/lib/apt/lists/* /var/lib/apt /var/lib/dpkg'
+ENV RM_ITEMS '/tmp/* /var/tmp/* /var/backups/* /usr/share/man /usr/share/doc'
+
 RUN curl "https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR}/ruby-${RUBY_VERSION}.tar.gz" |\
   tar -xz && \
   cd ruby-${RUBY_VERSION} && \
