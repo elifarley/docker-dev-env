@@ -12,8 +12,9 @@ gcc g++ make patch binutils libc6-dev \
   libpq-dev unixodbc unixodbc-dev unixodbc-bin ruby-odbc freetds-bin freetds-common freetds-dev postgresql-client \
  "
 
-RUN apt-get install -y --no-install-recommends $APT_PACKAGES && \
-apt-get autoremove --purge -y && apt-get clean && rm -rf $RM_ITEMS
+RUN \
+  xinstall add-pkg && \
+  xinstall cleanup
 
 ENV RUBY_MAJOR "2.3"
 ENV RUBY_VERSION "2.3.0"
@@ -51,5 +52,3 @@ RUN printf "PATH=$PATH\n" >> "$HOME"/.ssh/environment && \
     >> "$HOME"/.bashrc
 
 RUN chown -R $_USER:$_USER "$HOME"
-
-#VOLUME $HOME/.rbenv
