@@ -1,2 +1,2 @@
-#!/bin/bash -e
+#!/bin/sh
 exec node "$HOME"/app.js "$@"
