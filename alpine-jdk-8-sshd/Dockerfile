@@ -28,3 +28,6 @@ RUN \
   xinstall add tar && \
   xinstall configure sshd && \
   xinstall cleanup
+
+COPY $_USER.sh $HOME/
+RUN chmod +x "$HOME"/$_USER.sh && chown "$_USER":"$_USER" "$HOME"/$_USER.sh
