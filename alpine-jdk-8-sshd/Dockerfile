@@ -9,11 +9,11 @@ TZ=${TZ:-Brazil/East} \
 TERM=xterm-256color
 ENV HOME=/$_USER JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
 
+ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
+CMD ["/app/app.sh"]
+
 # SSHD
 EXPOSE 2200
-
-ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
-CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
