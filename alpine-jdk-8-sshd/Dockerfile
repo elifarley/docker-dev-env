@@ -21,8 +21,8 @@ RUN \
   xinstall save-image-info && \
   xinstall add gosu "$GOSU_VERSION" && \
   xinstall add tini "$TINI_VERSION" && \
-  xinstall add-base && \
   xinstall add-user "$_USER" && \
+  xinstall add entrypoint && \
   xinstall add timezone && \
   xinstall add-pkg && \
   xinstall add tar && \
