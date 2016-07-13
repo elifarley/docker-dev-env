@@ -14,23 +14,19 @@ ENV HOME=/$_USER JAVA_TOOL_OPTIONS="-Duser.timezone=$TZ"
 # SSHD
 EXPOSE 2200
 
-ENTRYPOINT ["/bin/tini", "--", "/entry.sh"]
+ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/entrypoint"]
 CMD ["/usr/sbin/sshd", "-D", "-f", "/etc/ssh/sshd_config"]
 
 WORKDIR $HOME
 
 RUN apk --update add ca-certificates curl && \
 curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
-  xinstall add timezone && \
   xinstall save-image-info && \
+  xinstall add gosu "$GOSU_VERSION" && \
+  xinstall add tini "$TINI_VERSION" && \
+  xinstall add entrypoint && \
+  xinstall add-user "$_USER" && \
+  xinstall add timezone && \
   xinstall add-pkg && \
   xinstall configure sshd && \
   xinstall cleanup
-
-RUN \
-  xinstall add tini "$TINI_VERSION" "$TINI_SHA" && \
-  xinstall add gosu "$GOSU_VERSION" "$GOSU_SHA"
-
-RUN xinstall add-user "$_USER"
-
-RUN xinstall add-base
