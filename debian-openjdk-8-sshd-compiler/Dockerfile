@@ -7,7 +7,7 @@ gcc g++ make patch binutils libc6-dev \
   libjemalloc-dev libffi-dev libssl-dev libyaml-dev zlib1g-dev libgmp-dev libxml2-dev \
   libxslt1-dev libreadline-dev libsqlite3-dev \
   libpq-dev unixodbc unixodbc-dev unixodbc-bin ruby-odbc freetds-bin freetds-common freetds-dev postgresql-client \
-  git lxc golang\
+  git lxc\
 "
 
 RUN \
@@ -15,4 +15,5 @@ RUN \
   xinstall add-pkg && \
   xinstall add maven3 3.3.9 && \
   xinstall add gradle 2.13 '01078159f79fbe09fc006b040886423d8736dae8' && \
+  xinstall add golang 1.7.4 && \
   xinstall cleanup
