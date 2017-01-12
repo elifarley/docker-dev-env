@@ -16,4 +16,5 @@ RUN \
   xinstall add-pkg python3-pip && pip3 install awscli-cwlogs && xinstall remove-pkg python3-pip && \
   xinstall add maven3 3.3.9 && \
   xinstall add golang 1.7.4 && \
+  xinstall add ruby 2.3.0 && gem install bundler && \
   xinstall cleanup
