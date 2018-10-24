@@ -2,14 +2,14 @@ FROM node:10-alpine
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 ENV BASE_IMAGE=elifarley/docker-dev-env:alpine-wasm
 
-ARG APK_PACKAGES="su-exec rsync sudo shadow bash"
-ARG TINI_VERSION='v0.13.2'
+ARG APK_PACKAGES="su-exec openssh rsync sudo shadow bash"
+ARG TINI_VERSION='v0.18.0'
 
 ARG _USER=app
 ARG HOME=/$_USER
 
 ENV \
-  NPM_CONFIG_LOGLEVEL=info \
+  NPM_CONFIG_LOGLEVEL=warn \
   _USER="$_USER" \
   HOME="$HOME"
 
@@ -18,7 +18,10 @@ ENTRYPOINT ["tini", "--", "entrypoint"]
 
 WORKDIR $HOME
 
-USER root
+# SSHD
+EXPOSE 2200
+
+COPY . "$HOME"/
 
 RUN apk --update add ca-certificates curl && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
@@ -29,4 +32,5 @@ RUN apk --update add ca-certificates curl && \
   xinstall add-pkg && \
   xinstall add tar && \
   npm install --save-dev webpack walt-compiler walt-loader && \
-  xinstall cleanup
+  xinstall cleanup && \
+  chmod +x "$HOME"/*app*.sh && chown "$_USER":"$_USER" "$HOME"/*app.sh
