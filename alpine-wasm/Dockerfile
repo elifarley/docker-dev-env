@@ -30,6 +30,7 @@ RUN apk --update add ca-certificates curl && \
   xinstall add entrypoint && \
   xinstall add-user "$_USER" && \
   xinstall add-pkg && \
+  xinstall configure sshd && \
   xinstall add tar && \
   npm install --save-dev webpack walt-compiler walt-loader && \
   xinstall cleanup && \
