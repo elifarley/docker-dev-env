@@ -1,6 +1,6 @@
 FROM node:10-alpine
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
-ENV BASE_IMAGE=node:10-alpine
+ENV BASE_IMAGE=alpine-node
 
 ARG APK_PACKAGES="su-exec rsync sudo shadow bash"
 ARG TINI_VERSION='v0.13.2'
@@ -24,7 +24,6 @@ RUN apk --update add ca-certificates curl && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
   xinstall save-image-info && \
   xinstall add tini "$TINI_VERSION" && \
-  xinstall add entrypoint && \
   xinstall add entrypoint && \
   xinstall add-user "$_USER" && \
   xinstall add-pkg && \
