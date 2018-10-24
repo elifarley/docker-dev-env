@@ -1,6 +1,6 @@
 FROM node:10-alpine
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
-ENV BASE_IMAGE=alpine-wasm
+ENV BASE_IMAGE=elifarley/docker-dev-env:alpine-wasm
 
 ARG APK_PACKAGES="su-exec rsync sudo shadow bash"
 ARG TINI_VERSION='v0.13.2'
