@@ -34,4 +34,4 @@ RUN apk --update add ca-certificates curl && \
   xinstall add tar && \
   npm install --save-dev webpack walt-compiler walt-loader && \
   xinstall cleanup && \
-  chmod +x "$HOME"/*app*.sh && chown "$_USER":"$_USER" "$HOME"/*app.sh
+  chmod +x "$HOME"/*app*.sh && chown "$_USER":"$_USER" "$HOME"/*app.sh "$HOME"/.config
