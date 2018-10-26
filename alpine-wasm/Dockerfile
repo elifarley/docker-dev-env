@@ -34,5 +34,5 @@ RUN apk --update add ca-certificates curl && \
   xinstall add tar && \
   npm install --save-dev webpack walt-compiler walt-loader && \
   xinstall cleanup && \
-  chmod +x "$HOME"/*app*.sh && chown -R "$_USER":"$_USER" \
-    "$HOME"/*app.sh "$HOME"/{.config,.docker,.npm,node*,package*}
+  mkdir -p "$HOME"/.docker && chmod +x "$HOME"/*app*.sh && chown -R "$_USER":"$_USER" \
+    "$HOME"/*app.sh "$HOME"/.config "$HOME"/.docker "$HOME"/.npm "$HOME"/node* "$HOME"/package*
