@@ -32,7 +32,7 @@ RUN apk --update add ca-certificates curl && \
   xinstall add-pkg && \
   xinstall configure sshd && \
   xinstall add tar && \
-  npm install --save-dev webpack walt-compiler walt-loader && \
+  npm install --save-dev webpack webpack-cli walt-compiler walt-loader && \
   xinstall cleanup && \
   mkdir -p "$HOME"/.docker && chmod +x "$HOME"/*app*.sh && chown -R "$_USER":"$_USER" \
     "$HOME"/*app.sh "$HOME"/.config "$HOME"/.docker "$HOME"/.npm "$HOME"/node* "$HOME"/package*
