@@ -1,6 +1,7 @@
 FROM node:10-alpine
 MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 ENV BASE_IMAGE=elifarley/docker-dev-env:alpine-wasm
+# See https://medium.com/@dandisagrees/node-development-in-docker-7939d3bc2db7
 
 ARG APK_PACKAGES="su-exec openssh rsync sudo shadow bash"
 ARG TINI_VERSION='v0.18.0'
@@ -9,6 +10,7 @@ ARG _USER=app
 ARG HOME=/$_USER
 
 ENV \
+  NODE_PATH=/usr/local/lib/node_modules \
   NPM_CONFIG_LOGLEVEL=warn \
   _USER="$_USER" \
   HOME="$HOME"
