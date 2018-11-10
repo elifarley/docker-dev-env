@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 . $HOME/.cargo/env
 export USER=app
 
