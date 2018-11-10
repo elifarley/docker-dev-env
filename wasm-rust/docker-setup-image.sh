@@ -3,7 +3,7 @@ set -x
 
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 
-. /app/.cargo/env
+. $HOME/.cargo/env
 
 rustc --version || exit
 
