@@ -15,7 +15,8 @@ ENV \
   NPM_CONFIG_LOGLEVEL=warn \
   _USER="$_USER" \
   LANG=en_US.UTF-8 TZ=${TZ:-Brazil/East} \
-  HOME="$HOME"
+  HOME="$HOME" \
+  IMAGE_SETUP_FILE="$HOME/docker-setup-image.sh"
 
 ENTRYPOINT ["tini", "--", "entrypoint"]
 # 'entrypoint' will run $HOME/app.sh by default
@@ -35,13 +36,7 @@ RUN apt-get update -y && apt-get install -y ca-certificates curl && \
   xinstall add-user "$_USER" && \
   xinstall add entrypoint && \
   xinstall add timezone && \
-  xinstall add-pkg && \
-  xinstall configure sshd
-
-RUN \
-  curl https://sh.rustup.rs -sSf | sh -s -- -y && { rustc --version || which rustc || echo no rust; } && \
-  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && \
-  cargo install cargo-generate && \
-  xinstall cleanup && \
-  mkdir -p "$HOME"/.docker && chmod +x "$HOME"/*app*.sh && chown -R "$_USER":"$_USER" \
-    "$HOME"/*app.sh "$HOME"/.config "$HOME"/.docker "$HOME"/.npm
+  mkdir -p "$HOME"/.docker && chown -R "$_USER":"$_USER" \
+    "$HOME"/.docker && \
+  cat $IMAGE_SETUP_FILE && gosu app $IMAGE_SETUP_FILE && \
+  xinstall cleanup
