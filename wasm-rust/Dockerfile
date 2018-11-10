@@ -38,5 +38,5 @@ RUN apt-get update -y && apt-get install -y ca-certificates curl && \
   xinstall add timezone && \
   mkdir -p "$HOME"/.docker && chown -R "$_USER":"$_USER" \
     "$HOME"/.docker && \
-  cat $IMAGE_SETUP_FILE && gosu app $IMAGE_SETUP_FILE && \
+  cat $IMAGE_SETUP_FILE && chmod +x $IMAGE_SETUP_FILE && gosu app $IMAGE_SETUP_FILE && \
   xinstall cleanup
