@@ -3,7 +3,7 @@ MAINTAINER Elifarley Cruz <elifarley@gmail.com>
 ENV BASE_IMAGE=elifarley/docker-dev-env:wasm-rust
 # See https://medium.com/@dandisagrees/node-development-in-docker-7939d3bc2db7
 
-ARG APT_PACKAGES="openssh-server sudo ca-certificates curl rsync"
+ARG APT_PACKAGES="openssh-server ca-certificates curl rsync"
 ARG TINI_VERSION='v0.18.0'
 ARG GOSU_VERSION='1.5'
 
@@ -24,7 +24,7 @@ ENTRYPOINT ["tini", "--", "entrypoint"]
 WORKDIR $HOME
 
 # SSHD
-EXPOSE 2200
+EXPOSE 2200 8080
 
 COPY . "$HOME"/
 

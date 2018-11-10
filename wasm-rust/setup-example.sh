@@ -12,11 +12,14 @@ else
   echo 'wasm-game-of-life' | cargo generate --git https://github.com/rustwasm/wasm-pack-template
 fi
 
-cd $project_dir
+cd $project_dir || exit
 pwd
 
 echo "wasm-pack..."
-wasm-pack build
+wasm-pack build || exit
 
 echo "create-wasm-app..."
-npm init wasm-app www
+npm init wasm-app www || exit
+
+echo "Serve www..."
+(cd www && python -m SimpleHTTPServer 8080)
