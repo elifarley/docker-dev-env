@@ -21,6 +21,15 @@ wasm-pack build || exit
 
 echo "create-wasm-app..."
 npm init wasm-app www || exit
+cd www && npm install || exit
+cd ../pkg && npm link || exit
+cd ../www && npm link wasm-game-of-life || exit
+
+cat <<EOF >index.js
+import * as wasm from "wasm-game-of-life";
+
+wasm.greet();
+EOF
 
 echo "Serve www..."
-(cd www && python -m SimpleHTTPServer 8080)
+(cd ../www && python -m SimpleHTTPServer 8080)

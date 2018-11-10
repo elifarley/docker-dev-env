@@ -28,6 +28,8 @@ EXPOSE 2200 8080
 
 COPY . "$HOME"/
 
+# Also sets up permissions for /usr/local/lib/node_modules/wasm-game-of-life
+
 RUN apt-get update -y && apt-get install -y ca-certificates curl && \
   curl -fsSL https://raw.githubusercontent.com/elifarley/cross-installer/master/install.sh | sh && \
   xinstall save-image-info && \
@@ -37,6 +39,6 @@ RUN apt-get update -y && apt-get install -y ca-certificates curl && \
   xinstall add entrypoint && \
   xinstall add timezone && \
   mkdir -p "$HOME"/.docker && chown -R "$_USER":"$_USER" \
-    "$HOME"/.docker && \
+    "$HOME"/.docker && chmod -R go=u /usr/local/lib && \
   cat $IMAGE_SETUP_FILE && gosu app $IMAGE_SETUP_FILE && \
   xinstall cleanup
