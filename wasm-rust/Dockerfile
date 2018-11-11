@@ -38,6 +38,8 @@ RUN apt-get update -y && apt-get install -y ca-certificates curl && \
   xinstall add-user "$_USER" && \
   xinstall add entrypoint && \
   xinstall add timezone && \
+  xinstall add-pkg && \
+  xinstall configure sshd && \
   mkdir -p "$HOME"/.docker && chown -R "$_USER":"$_USER" \
     "$HOME"/.docker && chmod -R go=u /usr/local/lib && \
   cat $IMAGE_SETUP_FILE && gosu app $IMAGE_SETUP_FILE && \
