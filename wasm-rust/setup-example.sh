@@ -31,5 +31,8 @@ import * as wasm from "wasm-game-of-life";
 wasm.greet();
 EOF
 
-echo "Serve www..."
-(cd ../www && npm run start)
+# echo "Serve www (debug mode)..."
+# (cd ../www && npm run start)
+
+echo "Serve www (production mode)..."
+(cd ../www && node_modules/.bin/webpack && cd dist && python web-server.py)
